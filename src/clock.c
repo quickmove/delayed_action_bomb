@@ -22,19 +22,30 @@ void init() {
 
 
 
-
 int main(void) {
 	init();
 	while(1) {
+	
+		//uint8_t i = 0;
+
+		//for(i = 0; i < 10; i++) {
+			//set_led_number(i, 0);
+			//_delay_ms(1000);
+		//}
+	
+		uint8_t leftnum = 9;
+		uint8_t rightnum = 35;
+		uint8_t numbers[4];
+	
+		numbers[0] = leftnum / 10;
+		numbers[1] = leftnum % 10;
+		numbers[2] = rightnum / 10;
+		numbers[3] = rightnum % 10;
+	
 		uint8_t i = 0;
-		
-		set_led_number_position(0);
-		
-
-		for(i = 0; i < 10; i++) {
-			set_led_number(i, 0);
-			_delay_ms(1000);
+		for(i = 0; i < 4; i++) {
+			set_led_number(numbers[i], i);
+			_delay_ms(10);
 		}
-
 	}
 }

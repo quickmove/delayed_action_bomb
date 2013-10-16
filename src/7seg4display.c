@@ -1,3 +1,5 @@
+#include <util/delay.h>
+
 #include "7seg4display.h"
 #include "74164.h"
 
@@ -43,6 +45,6 @@ void set_led_number_position(uint8_t position) {
 }
 
 void set_led_number(uint8_t number, uint8_t position) {
+	set_led_number_position(position);
 	send164data(LED_NUMBER_DATA[number]);
-
 }
