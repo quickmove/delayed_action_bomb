@@ -5,7 +5,6 @@
 #ifndef _7_SEG_4_DISPLAY_H
 #define _7_SEG_4_DISPLAY_H
 
-#include <avr/io.h>
 #include <stdint.h>
 
 
@@ -14,16 +13,7 @@
 * 初始化4位7段数码管脚位
 *
 */
-void init7seg4display();
-
-
-/**
-* 设置4位7段数码管的位电平，低电平点亮
-* PORTC 第2位开始的4位为共阴脚
-*
-* position 4位的7段数码管，此为指定某位，0开始
-*/
-void set_led_number_position(uint8_t position);
+void Display7Seg4Init();
 
 
 /**
@@ -33,7 +23,7 @@ void set_led_number_position(uint8_t position);
 * position 4位的7段数码管，此为指定某位，0开始
 *
 */
-void set_led_number(uint8_t number, uint8_t position);
+void Display7Seg4SetPositionNumber(uint8_t number, uint8_t position);
 
 
 #endif

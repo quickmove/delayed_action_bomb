@@ -25,12 +25,12 @@
 #define CLR_DATA164		DATA164_PORT &= ~(1 << DATA164_BIT)
 
 
-void init164() {
+void IC164Init() {
 	CP164_DDR |= (1 << CP164_BIT);
 	DATA164_DDR |= (1 << DATA164_BIT);
 }
 
-void send164data(uint8_t data) {
+void IC164SendData(uint8_t data) {
 	
 	uint8_t i = 7;
 	for(i = 0; i < 8; i++) {

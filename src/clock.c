@@ -15,8 +15,8 @@ uint8_t led_number_right = 0;	// 7段数码管，右边数字的值
 *
 */
 void init() {
-	init164();
-	init7seg4display();
+	IC164Init();
+	Display7Seg4Init();
 }
 
 
@@ -44,7 +44,7 @@ int main(void) {
 	
 		uint8_t i = 0;
 		for(i = 0; i < 4; i++) {
-			set_led_number(numbers[i], i);
+			Display7Seg4SetPositionNumber(numbers[i], i);
 			_delay_ms(10);
 		}
 	}
