@@ -4,6 +4,7 @@
 
 #include "74164.h"
 #include "7seg4display.h"
+#include "ds1302.h"
 
 
 uint8_t led_number_left = 0;	// 7段数码管，左边数字的值
@@ -17,6 +18,7 @@ uint8_t led_number_right = 0;	// 7段数码管，右边数字的值
 void init() {
 	IC164Init();
 	Display7Seg4Init();
+	DS1302Init();
 }
 
 
@@ -33,14 +35,14 @@ int main(void) {
 			//_delay_ms(1000);
 		//}
 	
-		uint8_t leftnum = 9;
-		uint8_t rightnum = 35;
+		uint8_t leftnum = DS1302GetMinute();
+		uint8_t rightnum = DS1302GetSecond();
 		uint8_t numbers[4];
 	
-		numbers[0] = leftnum / 10;
-		numbers[1] = leftnum % 10;
-		numbers[2] = rightnum / 10;
-		numbers[3] = rightnum % 10;
+		numbers[0] = leftnum / 16;
+		numbers[1] = leftnum % 16;
+		numbers[2] = rightnum / 16;
+		numbers[3] = rightnum % 16;
 	
 		uint8_t i = 0;
 		for(i = 0; i < 4; i++) {
