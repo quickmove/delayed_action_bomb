@@ -148,6 +148,8 @@ uint8_t readReg(uint8_t addr) {
 	return ret;
 }
 
+///////////////////////////////////////////////////////
+
 
 void DS1302Init(void) {
 	DS1302_RST_DDR |= (1 << DS1302_RST_BIT);
