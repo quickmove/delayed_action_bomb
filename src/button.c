@@ -3,10 +3,7 @@
 
 #include "button.h"
 
-///////////////////////////
-// 标志变量声明
-static uint8_t _keystate;
-static uint8_t _keyflag;
+
 
 #define KEYSTATE_NONE		0
 #define KEYSTATE_DOWN		1
@@ -44,34 +41,30 @@ void ButtonInit() {
 	BTN2_DDR &= ~(1 << BTN2_BIT);
 	BTN3_DDR &= ~(1 << BTN3_BIT);
 
-	_keystate = 0;
-	_keyflag = 0;
-
 }
 
+static uint8_t _keystate = 0;
+
 uint8_t checkBtn1Value() {
+	
 	uint8_t ret = 0;
 
 	switch(_keystate) {
 		case KEYSTATE_NONE:
-			if(_keyflag == 0 && VAL_BTN1) {
-				_keyflag = 1;
+			if(!VAL_BTN1) {
 				_keystate = KEYSTATE_DOWN;
 			}
 			break;
 		case KEYSTATE_DOWN:
-			if(_keyflag && VAL_BTN1 == 0) {
-				_keyflag = 0;
+			if(VAL_BTN1) {
 				_keystate = KEYSTATE_NONE;
-			} else if(_keyflag && VAL_BTN1) {
+			} else {
 				ret = 1;
-				_keyflag = 1;
 				_keystate = KEYSTATE_KEEPDOWN;
 			}
 			break;
 		case KEYSTATE_KEEPDOWN:
-			if(_keyflag && VAL_BTN1 == 0) {
-				_keyflag = 0;
+			if(VAL_BTN1) {
 				_keystate = KEYSTATE_NONE;
 			}
 			break;

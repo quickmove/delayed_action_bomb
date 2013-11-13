@@ -33,8 +33,6 @@ const uint8_t LED_NUMBER_DATA[] = {
 							  0xf6	// 9
 							 };
 
-uint8_t dotflag = 0;
-
 #define DOT_PORT		PORTD
 #define DOT_DDR			DDRD
 #define DOT_BIT			3
@@ -78,12 +76,7 @@ void Display7Seg4SetPositionNumber(uint8_t number, uint8_t position) {
 }
 
 void Flash7Seg4Dot(void) {
-	if(dotflag) {
-		CLR_DOT;
-		dotflag = 0;
-	}
-	else {
-		SET_DOT;
-		dotflag = 1;
-	}
+	SET_DOT;
+	_delay_ms(100);
+	CLR_DOT;
 }
