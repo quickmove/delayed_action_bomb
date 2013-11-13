@@ -33,7 +33,7 @@
 #define SET_DS1302_IO		DS1302_IO_PORT |= (1 << DS1302_IO_BIT)
 #define CLR_DS1302_IO		DS1302_IO_PORT &= ~(1 << DS1302_IO_BIT)
 // IOÈ¡Öµ
-#define VAL_DS1302_IO		DS1302_IO_PIN & (1 << DS1302_IO_BIT)
+#define VAL_DS1302_IO		(DS1302_IO_PIN & (1 << DS1302_IO_BIT))
 
 // ÉèÖÃIO ¶Á/Ð´
 #define DS1302_IO_WRITE		DS1302_IO_DDR |= (1 << DS1302_IO_BIT)
@@ -151,7 +151,7 @@ uint8_t readReg(uint8_t addr) {
 ///////////////////////////////////////////////////////
 
 
-void DS1302Init(void) {
+void DS1302Init() {
 	DS1302_RST_DDR |= (1 << DS1302_RST_BIT);
 	DS1302_CLK_DDR |= (1 << DS1302_CLK_BIT);
 	DS1302_IO_DDR |= (1 << DS1302_IO_BIT);

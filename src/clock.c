@@ -5,6 +5,7 @@
 #include "74164.h"
 #include "7seg4display.h"
 #include "ds1302.h"
+#include "button.h"
 
 
 uint8_t led_number_left = 0;	// 7段数码管，左边数字的值
@@ -19,6 +20,7 @@ void init() {
 	IC164Init();
 	Display7Seg4Init();
 	DS1302Init();
+	ButtonInit();
 }
 
 
@@ -34,6 +36,7 @@ int main(void) {
 			//set_led_number(i, 0);
 			//_delay_ms(1000);
 		//}
+
 	
 		uint8_t leftnum = DS1302GetMinute();
 		uint8_t rightnum = DS1302GetSecond();
@@ -49,5 +52,10 @@ int main(void) {
 			Display7Seg4SetPositionNumber(numbers[i], i);
 			_delay_ms(10);
 		}
+
+		if(checkBtn1Value())
+			Flash7Seg4Dot();
+		
 	}
 }
+

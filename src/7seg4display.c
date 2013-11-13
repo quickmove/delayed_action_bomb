@@ -33,6 +33,15 @@ const uint8_t LED_NUMBER_DATA[] = {
 							  0xf6	// 9
 							 };
 
+uint8_t dotflag = 0;
+
+#define DOT_PORT		PORTD
+#define DOT_DDR			DDRD
+#define DOT_BIT			3
+
+#define SET_DOT			DOT_PORT |= (1 << DOT_BIT)
+#define CLR_DOT			DOT_PORT &= ~(1 << DOT_BIT)
+
 
 /**
 * 设置4位7段数码管的位电平，低电平点亮
@@ -48,6 +57,8 @@ void Display7Seg4Init() {
 	for(i = 0; i < 4; i++) {
 		CASCODE_DDR |= (1 << (CASCODE_BIT_0 + i));
 	}
+
+	DOT_DDR |= (1 << DOT_BIT);
 }
 
 
@@ -64,4 +75,15 @@ void Display7Seg4SetPosition(uint8_t position) {
 void Display7Seg4SetPositionNumber(uint8_t number, uint8_t position) {
 	Display7Seg4SetPosition(position);
 	IC164SendData(LED_NUMBER_DATA[number]);
+}
+
+void Flash7Seg4Dot(void) {
+	if(dotflag) {
+		CLR_DOT;
+		dotflag = 0;
+	}
+	else {
+		SET_DOT;
+		dotflag = 1;
+	}
 }

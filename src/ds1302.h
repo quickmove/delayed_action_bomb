@@ -1,7 +1,7 @@
 //////////////////////////////
 // ds1302驱动
 //////////////////////////////
-#ifdef _DS1302_H
+#ifndef _DS1302_H
 #define _DS1302_H
 
 #include <stdint.h>
@@ -10,15 +10,15 @@
 * 初始化ds1302
 *
 */
-void DS1302Init(void);
+void DS1302Init();
 
 /**
 * 获取时间
 *
 */
-uint8_t DS1302GetHour(void);
-uint8_t DS1302GetMinute(void);
-uint8_t DS1302GetSecond(void);
+uint8_t DS1302GetHour();
+uint8_t DS1302GetMinute();
+uint8_t DS1302GetSecond();
 
 /**
 * 设置时间

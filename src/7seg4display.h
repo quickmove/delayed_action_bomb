@@ -25,5 +25,7 @@ void Display7Seg4Init();
 */
 void Display7Seg4SetPositionNumber(uint8_t number, uint8_t position);
 
+void Flash7Seg4Dot();
+
 
 #endif
