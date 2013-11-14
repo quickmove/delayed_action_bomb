@@ -75,8 +75,13 @@ void Display7Seg4SetPositionNumber(uint8_t number, uint8_t position) {
 	IC164SendData(LED_NUMBER_DATA[number]);
 }
 
+static uint8_t flash7segflag = 0;
 void Flash7Seg4Dot(void) {
-	SET_DOT;
-	_delay_ms(100);
-	CLR_DOT;
+	if(flash7segflag) {
+		flash7segflag = 0;
+		SET_DOT;
+	} else {
+		flash7segflag = 1;
+		CLR_DOT;
+	}
 }
