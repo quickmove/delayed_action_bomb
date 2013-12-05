@@ -53,7 +53,7 @@ int main(void) {
 			_delay_ms(10);
 		}
 
-		if(checkBtn1Value())
+		if(checkBtnValue(0))
 			Flash7Seg4Dot();
 		
 	}
