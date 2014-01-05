@@ -11,6 +11,6 @@
 void ButtonInit();
 
 
-uint8_t checkBtnValue(uint8_t btnIndex);
+uint8_t ButtonCheckBtnValue(uint8_t btnIndex);
 
 #endif

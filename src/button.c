@@ -49,7 +49,7 @@ void ButtonInit() {
 
 static uint8_t _keystate[] = {0, 0, 0};
 
-uint8_t checkBtnValue(uint8_t btnIndex) {
+uint8_t ButtonCheckBtnValue(uint8_t btnIndex) {
 	
 	uint8_t ret = 0;
 
@@ -69,6 +69,7 @@ uint8_t checkBtnValue(uint8_t btnIndex) {
 			break;
 		case KEYSTATE_KEEPDOWN:
 			if(VAL_BTN(btnIndex)) {
+				ret = 2;
 				_keystate[btnIndex] = KEYSTATE_NONE;
 			}
 			break;
