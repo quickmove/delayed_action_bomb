@@ -5,12 +5,12 @@
 
 // ==== 164Ω≈Œª…Ë÷√ ====
 
-#define CP164_PORT		PORTC
-#define CP164_DDR		DDRC
+#define CP164_PORT		PORTB
+#define CP164_DDR		DDRB
 #define CP164_BIT		0
 
-#define DATA164_PORT	PORTC
-#define DATA164_DDR		DDRC
+#define DATA164_PORT	PORTB
+#define DATA164_DDR		DDRB
 #define DATA164_BIT		1
 
 

@@ -7,16 +7,16 @@
 
 // ==== 共阴极脚位设置 ===
 // 共阴极4脚所在的单片机PORT
-#define CASCODE_PORT		PORTC
-#define CASCODE_DDR			DDRC
+#define CASCODE_PORT		PORTD
+#define CASCODE_DDR			DDRD
 // 共阴极起始脚位
-#define CASCODE_BIT_0		2
+#define CASCODE_BIT_0		0
 
 // 脚位mask，用于运算时取共阴极4个顺序脚位
-// 共阴极脚位mask		0111100
-#define CASCODE_MASK	0x3c
-// 共阴极脚位反umask 	1000011
-#define CASCODE_UMASK	0x43
+// 共阴极脚位mask		00001111
+#define CASCODE_MASK	0x0F
+// 共阴极脚位反umask 	11110000
+#define CASCODE_UMASK	0xF0
 
 
 // LED段显示位表
@@ -35,7 +35,7 @@ const uint8_t LED_NUMBER_DATA[] = {
 
 #define DOT_PORT		PORTD
 #define DOT_DDR			DDRD
-#define DOT_BIT			3
+#define DOT_BIT			4
 
 #define SET_DOT			DOT_PORT |= (1 << DOT_BIT)
 #define CLR_DOT			DOT_PORT &= ~(1 << DOT_BIT)
@@ -68,6 +68,8 @@ void Display7Seg4SetPosition(uint8_t position) {
 	tmp2 |= ~(1 << (CASCODE_BIT_0 + position));	//指定位置低电平
 
 	CASCODE_PORT = tmp1 & tmp2;
+//	CASCODE_PORT |= ~(1 << 0);
+
 }
 
 void Display7Seg4SetPositionNumber(uint8_t number, uint8_t position) {

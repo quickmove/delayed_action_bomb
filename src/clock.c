@@ -19,8 +19,8 @@ uint8_t led_number_right = 0;	// 7段数码管，右边数字的值
 void init() {
 	IC164Init();
 	Display7Seg4Init();
-	DS1302Init();
-	ButtonInit();
+//	DS1302Init();
+//	ButtonInit();
 }
 
 
@@ -29,17 +29,9 @@ void init() {
 int main(void) {
 	init();
 	while(1) {
-	
-		//uint8_t i = 0;
 
-		//for(i = 0; i < 10; i++) {
-			//set_led_number(i, 0);
-			//_delay_ms(1000);
-		//}
-
-	
-		uint8_t leftnum = DS1302GetMinute();
-		uint8_t rightnum = DS1302GetSecond();
+		uint8_t leftnum = 0x10;//DS1302GetMinute();
+		uint8_t rightnum = 0x25;//DS1302GetSecond();
 		uint8_t numbers[4];
 	
 		numbers[0] = leftnum / 16;
@@ -50,13 +42,13 @@ int main(void) {
 		uint8_t i = 0;
 		for(i = 0; i < 4; i++) {
 			Display7Seg4SetPositionNumber(numbers[i], i);
-			_delay_ms(10);
+			_delay_ms(5);
 		}
 
-		for(i = 0; i < 3; i++) {
-			if(ButtonCheckBtnValue(i))
-				Flash7Seg4Dot();
-		}
+//		for(i = 0; i < 3; i++) {
+//			if(ButtonCheckBtnValue(i))
+//				Flash7Seg4Dot();
+//		}
 		
 	}
 }
