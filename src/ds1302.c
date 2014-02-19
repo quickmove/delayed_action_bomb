@@ -6,18 +6,18 @@
 ///////////////////////////
 // ds1302Ω≈Œª…Ë÷√ 
 
-#define DS1302_RST_PORT		PORTD
-#define DS1302_RST_DDR		DDRD
-#define DS1302_RST_BIT		0
+#define DS1302_RST_PORT		PORTC
+#define DS1302_RST_DDR		DDRC
+#define DS1302_RST_BIT		3
 
-#define DS1302_CLK_PORT		PORTD
-#define DS1302_CLK_DDR		DDRD
-#define DS1302_CLK_BIT		1
+#define DS1302_CLK_PORT		PORTC
+#define DS1302_CLK_DDR		DDRC
+#define DS1302_CLK_BIT		4
 
-#define DS1302_IO_PORT		PORTD
-#define DS1302_IO_PIN		PIND
-#define DS1302_IO_DDR		DDRD
-#define DS1302_IO_BIT		2
+#define DS1302_IO_PORT		PORTC
+#define DS1302_IO_PIN		PINC
+#define DS1302_IO_DDR		DDRC
+#define DS1302_IO_BIT		5
 
 
 ////////////////////////////

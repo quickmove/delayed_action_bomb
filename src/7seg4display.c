@@ -68,8 +68,6 @@ void Display7Seg4SetPosition(uint8_t position) {
 	tmp2 |= ~(1 << (CASCODE_BIT_0 + position));	//指定位置低电平
 
 	CASCODE_PORT = tmp1 & tmp2;
-//	CASCODE_PORT |= ~(1 << 0);
-
 }
 
 void Display7Seg4SetPositionNumber(uint8_t number, uint8_t position) {
