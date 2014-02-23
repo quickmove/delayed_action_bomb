@@ -10,8 +10,8 @@
 #define CP164_BIT		0
 
 #define DATA164_PORT	PORTB
-#define DATA164_DDR		DDRB
-#define DATA164_BIT		1
+#define DATA164_DDR	DDRB
+#define DATA164_BIT	1
 
 
 // ==== 164½ÅÎ»²Ù×÷ ====

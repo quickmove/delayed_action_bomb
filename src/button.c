@@ -3,8 +3,6 @@
 
 #include "button.h"
 
-
-
 #define KEYSTATE_NONE		0
 #define KEYSTATE_DOWN		1
 #define KEYSTATE_KEEPDOWN	2

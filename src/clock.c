@@ -31,6 +31,10 @@ int main(void) {
 	DS1302SetSecond(0x58);
 	DS1302SetMinute(0x13);
 	DS1302SetHour(0);
+
+	uint8_t dotLedCountFlag = 0;
+	Flash7Seg4Dot();
+
 	while(1) {
 		
 
@@ -48,6 +52,13 @@ int main(void) {
 			Display7Seg4SetPositionNumber(numbers[i], i);
 			_delay_ms(5);
 		}
+
+		dotLedCountFlag++;
+		if(dotLedCountFlag > 0x20) {
+			Flash7Seg4Dot();
+			dotLedCountFlag = 0;
+		}
+		
 		
 	}
 }

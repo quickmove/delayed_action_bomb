@@ -25,6 +25,9 @@ void Display7Seg4Init();
 */
 void Display7Seg4SetPositionNumber(uint8_t number, uint8_t position);
 
+/**
+ * 闪烁中间的那秒点
+ */
 void Flash7Seg4Dot();
 
 
