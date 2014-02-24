@@ -3,10 +3,14 @@
 
 #include "button.h"
 
-#define KEYSTATE_NONE		0
-#define KEYSTATE_DOWN		1
-#define KEYSTATE_KEEPDOWN	2
-
+// 空闲
+#define KEYSTATE_IDLE					0
+// 等待按下确认(防抖)
+#define KEYSTATE_WAIT_DOWN_VALID		1
+// 等待按下释放
+#define KEYSTATE_WAIT_DOWN_RELEASE		2
+// 等待连发释放
+#define KEYSTATE_WAIT_BURST_RELEASE	3
 
 ///////////////////////////
 // 脚位定义
@@ -52,23 +56,33 @@ uint8_t ButtonCheckBtnValue(uint8_t btnIndex) {
 	uint8_t ret = 0;
 
 	switch(_keystate[btnIndex]) {
-		case KEYSTATE_NONE:
+		case KEYSTATE_IDLE:
 			if(!VAL_BTN(btnIndex)) {
-				_keystate[btnIndex] = KEYSTATE_DOWN;
+				_keystate[btnIndex] = KEYSTATE_WAIT_DOWN_VALID;
 			}
 			break;
-		case KEYSTATE_DOWN:
+		case KEYSTATE_WAIT_DOWN_VALID:
 			if(VAL_BTN(btnIndex)) {
-				_keystate[btnIndex] = KEYSTATE_NONE;
+				_keystate[btnIndex] = KEYSTATE_IDLE;
 			} else {
-				ret = 1;
-				_keystate[btnIndex] = KEYSTATE_KEEPDOWN;
+				_keystate[btnIndex] = KEYSTATE_WAIT_DOWN_RELEASE;
+				//TODO: keydown
 			}
 			break;
-		case KEYSTATE_KEEPDOWN:
-			if(VAL_BTN(btnIndex)) {
+		case KEYSTATE_WAIT_DOWN_RELEASE:
+			if(!VAL_BTN(btnIndex)) {
 				ret = 2;
-				_keystate[btnIndex] = KEYSTATE_NONE;
+				_keystate[btnIndex] = KEYSTATE_WAIT_BURST_RELEASE;
+			} else {
+				_keystate[btnIndex] = KEYSTATE_IDLE;
+				//TODO: keyup
+			}
+			break;
+		case KEYSTATE_WAIT_BURST_RELEASE:
+			//TODO: 加个延时计数，然后在此bursh
+			if(VAL_BTN(btnIndex)) {
+				_keystate[btnIndex] = KEYSTATE_IDLE;
+				//TODO: burshup
 			}
 			break;
 	}
