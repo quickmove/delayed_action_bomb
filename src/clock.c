@@ -8,6 +8,11 @@
 #include "button.h"
 
 
+void onKeyDown(uint8_t btnIndex);
+void onKeyUp(uint8_t btnIndex);
+void onKeyBursh(uint8_t btnIndex);
+void onKeyBurshUp(uint8_t btnIndex);
+
 uint8_t led_number_left = 0;	// 7段数码管，左边数字的值
 uint8_t led_number_right = 0;	// 7段数码管，右边数字的值
 
@@ -20,11 +25,14 @@ void init() {
 	IC164Init();
 	Display7Seg4Init();
 	DS1302Init();
-//	ButtonInit();
+
+	ButtonInit();
+	// 注册按键回调函数
+	ButtonRegisterKeyDownFunc(onKeyDown);
+	ButtonRegisterKeyUpFunc(onKeyUp);
+	ButtonRegisterKeyBurshFunc(onKeyBursh);
+	ButtonRegisterKeyBurshUpFunc(onKeyBurshUp);
 }
-
-
-
 
 int main(void) {
 	init();
@@ -36,8 +44,6 @@ int main(void) {
 	Flash7Seg4Dot();
 
 	while(1) {
-		
-
 		uint8_t leftnum = DS1302GetHour();
 		uint8_t rightnum = DS1302GetMinute();
 		uint8_t numbers[4];
@@ -58,8 +64,21 @@ int main(void) {
 			Flash7Seg4Dot();
 			dotLedCountFlag = 0;
 		}
-		
-		
 	}
 }
 
+void onKeyDown(uint8_t btnIndex) {
+
+}
+
+void onKeyUp(uint8_t btnIndex) {
+
+}
+
+void onKeyBursh(uint8_t btnIndex) {
+
+}
+
+void onKeyBurshUp(uint8_t btnIndex) {
+
+}

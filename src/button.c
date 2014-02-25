@@ -42,6 +42,11 @@
 
 //////////////////////////
 
+callback_keydown_t keydownFunc;
+callback_keyup_t keyupFunc;
+callback_keybursh_t keyburshFunc;
+callback_keyburshup_t keyburshupFunc;
+
 void ButtonInit() {
 	BTN1_DDR &= ~(1 << BTN1_BIT);
 	BTN2_DDR &= ~(1 << BTN2_BIT);
@@ -49,48 +54,69 @@ void ButtonInit() {
 
 }
 
-static uint8_t _keystate[] = {0, 0, 0};
+static uint8_t _keystate[] = { 0, 0, 0 };
+
 
 uint8_t ButtonCheckBtnValue(uint8_t btnIndex) {
-	
+
 	uint8_t ret = 0;
 
-	switch(_keystate[btnIndex]) {
-		case KEYSTATE_IDLE:
-			if(!VAL_BTN(btnIndex)) {
-				_keystate[btnIndex] = KEYSTATE_WAIT_DOWN_VALID;
-			}
-			break;
-		case KEYSTATE_WAIT_DOWN_VALID:
-			if(VAL_BTN(btnIndex)) {
-				_keystate[btnIndex] = KEYSTATE_IDLE;
-			} else {
-				_keystate[btnIndex] = KEYSTATE_WAIT_DOWN_RELEASE;
-				//TODO: keydown
-			}
-			break;
-		case KEYSTATE_WAIT_DOWN_RELEASE:
-			if(!VAL_BTN(btnIndex)) {
-				ret = 2;
-				_keystate[btnIndex] = KEYSTATE_WAIT_BURST_RELEASE;
-			} else {
-				_keystate[btnIndex] = KEYSTATE_IDLE;
-				//TODO: keyup
-			}
-			break;
-		case KEYSTATE_WAIT_BURST_RELEASE:
-			//TODO: 加个延时计数，然后在此bursh
-			if(VAL_BTN(btnIndex)) {
-				_keystate[btnIndex] = KEYSTATE_IDLE;
-				//TODO: burshup
-			}
-			break;
+	switch (_keystate[btnIndex]) {
+	case KEYSTATE_IDLE:
+		if (!VAL_BTN(btnIndex)) {
+			_keystate[btnIndex] = KEYSTATE_WAIT_DOWN_VALID;
+		}
+		break;
+	case KEYSTATE_WAIT_DOWN_VALID:
+		if (VAL_BTN(btnIndex)) {
+			_keystate[btnIndex] = KEYSTATE_IDLE;
+		} else {
+			_keystate[btnIndex] = KEYSTATE_WAIT_DOWN_RELEASE;
+			// keydown
+			if (keydownFunc)
+				keydownFunc(btnIndex);
+		}
+		break;
+	case KEYSTATE_WAIT_DOWN_RELEASE:
+		if (!VAL_BTN(btnIndex)) {
+			ret = 2;
+			_keystate[btnIndex] = KEYSTATE_WAIT_BURST_RELEASE;
+		} else {
+			_keystate[btnIndex] = KEYSTATE_IDLE;
+			// keyup
+			if (keyupFunc)
+				keyupFunc(btnIndex);
+		}
+		break;
+	case KEYSTATE_WAIT_BURST_RELEASE:
+		//TODO: 加个延时计数，然后在此bursh
+		//bursh
+		if (keyburshFunc)
+			keyburshFunc(btnIndex);
+		if (VAL_BTN(btnIndex)) {
+			_keystate[btnIndex] = KEYSTATE_IDLE;
+			// burshup
+			if (keyburshupFunc)
+				keyburshupFunc(btnIndex);
+		}
+		break;
 	}
 	return ret;
 }
 
+void ButtonRegisterKeyDownFunc(callback_keydown_t func) {
+	keydownFunc = func;
+}
 
+void ButtonRegisterKeyUpFunc(callback_keyup_t func) {
+	keyupFunc = func;
+}
 
+void ButtonRegisterKeyBurshFunc(callback_keybursh_t func) {
+	keyburshFunc = func;
+}
 
-
+void ButtonRegisterKeyBurshUpFunc(callback_keyburshup_t func) {
+	keyburshupFunc = func;
+}
 
