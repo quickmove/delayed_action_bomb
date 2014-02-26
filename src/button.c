@@ -31,16 +31,15 @@
 // 脚位取值
 
 // IO取值
-#define VAL_BTN1		(BTN1_PIN & (1 << BTN1_BIT))
-#define VAL_BTN2		(BTN2_PIN & (1 << BTN2_BIT))
-#define VAL_BTN3		(BTN3_PIN & (1 << BTN3_BIT))
+//#define VAL_BTN1		(BTN1_PIN & (1 << BTN1_BIT))
+//#define VAL_BTN2		(BTN2_PIN & (1 << BTN2_BIT))
+//#define VAL_BTN3		(BTN3_PIN & (1 << BTN3_BIT))
 
 // 按键相对于按键1的bit位置偏移作为index号...
 // 这里有点奇怪的写法没找到其他写法啊...
 #define BTN_GLOBAL_PIN		PIND
 #define VAL_BTN(index)		(BTN_GLOBAL_PIN & (1 << (BTN1_BIT + index)))
 
-//////////////////////////
 
 callback_keydown_t keydownFunc;
 callback_keyup_t keyupFunc;

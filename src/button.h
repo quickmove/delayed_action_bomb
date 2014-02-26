@@ -9,6 +9,15 @@ typedef void (*callback_keyup_t) (uint8_t btnIndex);
 typedef void (*callback_keybursh_t) (uint8_t btnIndex);
 typedef void (*callback_keyburshup_t) (uint8_t btnIndex);
 
+
+// 按键code定义(相对index)
+// key3 ModeButton
+#define KEYCODE_MODE	2
+// key2 AddButton
+#define KEYCODE_ADD	1
+// key1 SubButton
+#define KEYCODE_SUB	0
+
 /**
 * 初始化控制按钮的管脚
 *

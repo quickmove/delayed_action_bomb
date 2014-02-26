@@ -68,7 +68,13 @@ int main(void) {
 }
 
 void onKeyDown(uint8_t btnIndex) {
+	if(btnIndex == KEYCODE_MODE) {
 
+	} else if(btnIndex == KEYCODE_ADD) {
+
+	} else if(btnIndex == KEYCODE_SUB) {
+
+	}
 }
 
 void onKeyUp(uint8_t btnIndex) {
