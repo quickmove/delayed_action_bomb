@@ -40,11 +40,28 @@
 #define BTN_GLOBAL_PIN		PIND
 #define VAL_BTN(index)		(BTN_GLOBAL_PIN & (1 << (BTN1_BIT + index)))
 
+// 按键索引，相对于第0个按键
+#define KEYINDEX_MODE_BUTTON	2
+#define KEYINDEX_ADD_BUTTON	1
+#define KEYINDEX_SUB_BUTTON	0
 
-callback_keydown_t keydownFunc;
-callback_keyup_t keyupFunc;
-callback_keybursh_t keyburshFunc;
-callback_keyburshup_t keyburshupFunc;
+// mode键相关的回调句柄
+callback_mode_button_keydown_t modeBtnKeyDownFunc;
+callback_mode_button_keyup_t modeBtnKeyUpFunc;
+callback_mode_button_keybursh_t modeBtnKeyBurshFunc;
+callback_mode_button_keyburshup_t modeBtnKeyBurshUpFunc;
+
+// add键相关的回调句柄
+callback_add_button_keydown_t addBtnKeyDownFunc;
+callback_add_button_keyup_t addBtnKeyUpFunc;
+callback_add_button_keybursh_t addBtnKeyBurshFunc;
+callback_add_button_keyburshup_t addBtnKeyBurshUpFunc;
+
+// sub键相关的回调句柄
+callback_sub_button_keydown_t subBtnKeyDownFunc;
+callback_sub_button_keyup_t subBtnKeyUpFunc;
+callback_sub_button_keybursh_t subBtnKeyBurshFunc;
+callback_sub_button_keyburshup_t subBtnKeyBurshUpFunc;
 
 void ButtonInit() {
 	BTN1_DDR &= ~(1 << BTN1_BIT);
@@ -54,7 +71,6 @@ void ButtonInit() {
 }
 
 static uint8_t _keystate[] = { 0, 0, 0 };
-
 
 uint8_t ButtonCheckBtnValue(uint8_t btnIndex) {
 
@@ -72,8 +88,16 @@ uint8_t ButtonCheckBtnValue(uint8_t btnIndex) {
 		} else {
 			_keystate[btnIndex] = KEYSTATE_WAIT_DOWN_RELEASE;
 			// keydown
-			if (keydownFunc)
-				keydownFunc(btnIndex);
+			if (btnIndex == KEYINDEX_MODE_BUTTON) {
+				if (modeBtnKeyDownFunc)
+					modeBtnKeyBurshFunc();
+			} else if (btnIndex == KEYINDEX_ADD_BUTTON) {
+				if (addBtnKeyDownFunc)
+					addBtnKeyDownFunc();
+			} else if (btnIndex == KEYINDEX_SUB_BUTTON) {
+				if (subBtnKeyDownFunc)
+					subBtnKeyDownFunc();
+			}
 		}
 		break;
 	case KEYSTATE_WAIT_DOWN_RELEASE:
@@ -83,39 +107,94 @@ uint8_t ButtonCheckBtnValue(uint8_t btnIndex) {
 		} else {
 			_keystate[btnIndex] = KEYSTATE_IDLE;
 			// keyup
-			if (keyupFunc)
-				keyupFunc(btnIndex);
+			if (btnIndex == KEYINDEX_MODE_BUTTON) {
+				if (modeBtnKeyUpFunc)
+					modeBtnKeyUpFunc();
+			} else if (btnIndex == KEYINDEX_ADD_BUTTON) {
+				if (addBtnKeyUpFunc)
+					addBtnKeyUpFunc();
+			} else if (btnIndex == KEYINDEX_SUB_BUTTON) {
+				if (subBtnKeyUpFunc)
+					subBtnKeyUpFunc();
+			}
 		}
 		break;
 	case KEYSTATE_WAIT_BURST_RELEASE:
 		//TODO: 加个延时计数，然后在此bursh
 		//bursh
-		if (keyburshFunc)
-			keyburshFunc(btnIndex);
+		if (btnIndex == KEYINDEX_MODE_BUTTON) {
+			if (modeBtnKeyBurshFunc)
+				modeBtnKeyBurshFunc();
+		} else if (btnIndex == KEYINDEX_ADD_BUTTON) {
+			if (addBtnKeyBurshFunc)
+				addBtnKeyBurshFunc();
+		} else if (btnIndex == KEYINDEX_SUB_BUTTON) {
+			if (subBtnKeyBurshFunc)
+				subBtnKeyBurshFunc();
+		}
+
 		if (VAL_BTN(btnIndex)) {
 			_keystate[btnIndex] = KEYSTATE_IDLE;
 			// burshup
-			if (keyburshupFunc)
-				keyburshupFunc(btnIndex);
+			if (btnIndex == KEYINDEX_MODE_BUTTON) {
+				if (modeBtnKeyBurshUpFunc)
+					modeBtnKeyBurshUpFunc();
+			} else if (btnIndex == KEYINDEX_ADD_BUTTON) {
+				if (addBtnKeyBurshUpFunc)
+					addBtnKeyBurshUpFunc();
+			} else if (btnIndex == KEYINDEX_SUB_BUTTON) {
+				if (subBtnKeyBurshUpFunc)
+					subBtnKeyBurshUpFunc();
+			}
 		}
 		break;
 	}
 	return ret;
 }
 
-void ButtonRegisterKeyDownFunc(callback_keydown_t func) {
-	keydownFunc = func;
+void ButtonRegisterModeButtonKeyDownFunc(callback_mode_button_keydown_t func) {
+	modeBtnKeyDownFunc = func;
+}
+void ButtonRegisterModeButtonKeyUpFunc(callback_mode_button_keyup_t func) {
+	modeBtnKeyUpFunc = func;
+}
+void ButtonRegisterModeButtonKeyBurshFunc(callback_mode_button_keybursh_t func) {
+	modeBtnKeyBurshFunc = func;
+}
+void ButtonRegisterModeButtonKeyBurshUpFunc(
+		callback_mode_button_keyburshup_t func) {
+	modeBtnKeyBurshUpFunc = func;
 }
 
-void ButtonRegisterKeyUpFunc(callback_keyup_t func) {
-	keyupFunc = func;
+void ButtonRegisterAddButtonKeyDownFunc(callback_add_button_keydown_t func) {
+	addBtnKeyDownFunc = func;
 }
 
-void ButtonRegisterKeyBurshFunc(callback_keybursh_t func) {
-	keyburshFunc = func;
+void ButtonRegisterAddButtonKeyUpFunc(callback_add_button_keyup_t func) {
+	addBtnKeyUpFunc = func;
+}
+void ButtonRegisterAddButtonKeyBurshFunc(callback_add_button_keybursh_t func) {
+	addBtnKeyBurshFunc = func;
 }
 
-void ButtonRegisterKeyBurshUpFunc(callback_keyburshup_t func) {
-	keyburshupFunc = func;
+void ButtonRegisterAddButtonKeyBurshUpFunc(
+		callback_add_button_keyburshup_t func) {
+	addBtnKeyBurshUpFunc = func;
 }
 
+void ButtonRegisterSubButtonKeyDownFunc(callback_sub_button_keydown_t func) {
+	subBtnKeyDownFunc = func;
+}
+
+void ButtonRegisterSubButtonKeyUpFunc(callback_sub_button_keyup_t func) {
+	subBtnKeyUpFunc = func;
+}
+
+void ButtonRegisterSubButtonKeyBurshFunc(callback_sub_button_keybursh_t func) {
+	subBtnKeyBurshFunc = func;
+}
+
+void ButtonRegisterSubButtonKeyBurshUpFunc(
+		callback_sub_button_keyburshup_t func) {
+	subBtnKeyBurshUpFunc = func;
+}

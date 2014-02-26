@@ -4,19 +4,23 @@
 #include <stdint.h>
 
 // 按键触发回调
-typedef void (*callback_keydown_t) (uint8_t btnIndex);
-typedef void (*callback_keyup_t) (uint8_t btnIndex);
-typedef void (*callback_keybursh_t) (uint8_t btnIndex);
-typedef void (*callback_keyburshup_t) (uint8_t btnIndex);
+// mode键
+typedef void (*callback_mode_button_keydown_t) ();
+typedef void (*callback_mode_button_keyup_t) ();
+typedef void (*callback_mode_button_keybursh_t) ();
+typedef void (*callback_mode_button_keyburshup_t) ();
 
+// add键
+typedef void (*callback_add_button_keydown_t) ();
+typedef void (*callback_add_button_keyup_t) ();
+typedef void (*callback_add_button_keybursh_t) ();
+typedef void (*callback_add_button_keyburshup_t) ();
 
-// 按键code定义(相对index)
-// key3 ModeButton
-#define KEYCODE_MODE	2
-// key2 AddButton
-#define KEYCODE_ADD	1
-// key1 SubButton
-#define KEYCODE_SUB	0
+// sub键
+typedef void (*callback_sub_button_keydown_t) ();
+typedef void (*callback_sub_button_keyup_t) ();
+typedef void (*callback_sub_button_keybursh_t) ();
+typedef void (*callback_sub_button_keyburshup_t) ();
 
 /**
 * 初始化控制按钮的管脚
@@ -25,26 +29,23 @@ typedef void (*callback_keyburshup_t) (uint8_t btnIndex);
 void ButtonInit();
 
 /**
- * 注册回调keydown
- */
-void ButtonRegisterKeyDownFunc(callback_keydown_t func);
-/**
- * 注册回调keyup
- */
-void ButtonRegisterKeyUpFunc(callback_keyup_t func);
-/**
- * 注册回调keybursh
- */
-void ButtonRegisterKeyBurshFunc(callback_keybursh_t func);
-/**
- * 注册回调keyburshup
- */
-void ButtonRegisterKeyBurshUpFunc(callback_keyburshup_t func);
-
-/**
  * 按键检测
  */
 uint8_t ButtonCheckBtnValue(uint8_t btnIndex);
 
+void ButtonRegisterModeButtonKeyDownFunc(callback_mode_button_keydown_t func);
+void ButtonRegisterModeButtonKeyUpFunc(callback_mode_button_keyup_t func);
+void ButtonRegisterModeButtonKeyBurshFunc(callback_mode_button_keybursh_t func);
+void ButtonRegisterModeButtonKeyBurshUpFunc(callback_mode_button_keyburshup_t func);
+
+void ButtonRegisterAddButtonKeyDownFunc(callback_add_button_keydown_t func);
+void ButtonRegisterAddButtonKeyUpFunc(callback_add_button_keyup_t func);
+void ButtonRegisterAddButtonKeyBurshFunc(callback_add_button_keybursh_t func);
+void ButtonRegisterAddButtonKeyBurshUpFunc(callback_add_button_keyburshup_t func);
+
+void ButtonRegisterSubButtonKeyDownFunc(callback_sub_button_keydown_t func);
+void ButtonRegisterSubButtonKeyUpFunc(callback_sub_button_keyup_t func);
+void ButtonRegisterSubButtonKeyBurshFunc(callback_sub_button_keybursh_t func);
+void ButtonRegisterSubButtonKeyBurshUpFunc(callback_sub_button_keyburshup_t func);
 
 #endif
