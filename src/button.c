@@ -1,3 +1,11 @@
+//       _/             _/                            _/
+//      _/
+//     _/           _/_/     _/  _/_/             _/_/
+//    _/             _/     _/_/    _/             _/
+//   _/             _/     _/      _/             _/
+//  _/             _/     _/      _/       _/    _/
+// _/_/_/_/_/   _/_/_/   _/      _/   _/    _/_/  copyright by linjing. 2014
+
 #include <avr/io.h>
 #include <stdint.h>
 
@@ -30,11 +38,6 @@
 ///////////////////////////
 // 脚位取值
 
-// IO取值
-//#define VAL_BTN1		(BTN1_PIN & (1 << BTN1_BIT))
-//#define VAL_BTN2		(BTN2_PIN & (1 << BTN2_BIT))
-//#define VAL_BTN3		(BTN3_PIN & (1 << BTN3_BIT))
-
 // 按键相对于按键1的bit位置偏移作为index号...
 // 这里有点奇怪的写法没找到其他写法啊...
 #define BTN_GLOBAL_PIN		PIND
@@ -44,6 +47,9 @@
 #define KEYINDEX_MODE_BUTTON	2
 #define KEYINDEX_ADD_BUTTON	1
 #define KEYINDEX_SUB_BUTTON	0
+
+//////////////////////////////////////////////////////////////
+// 声明
 
 // mode键相关的回调句柄
 callback_mode_button_keydown_t modeBtnKeyDownFunc;
@@ -63,18 +69,107 @@ callback_sub_button_keyup_t subBtnKeyUpFunc;
 callback_sub_button_keybursh_t subBtnKeyBurshFunc;
 callback_sub_button_keyburshup_t subBtnKeyBurshUpFunc;
 
+void btnKeyDownFire(uint8_t btnIndex);
+void btnKeyUpFire(uint8_t btnIndex);
+void btnKeyBurshFire(uint8_t btnIndex);
+void btnKeyBurshUpFire(uint8_t btnIndex);
+
+/**
+ * 按键当前状态
+ */
+static uint8_t _keystate[] = { 0, 0, 0 };
+
+/**
+ * 连发触发的延时计数
+ */
+static uint8_t _keyburshDelayCount[] = { 0, 0, 0 };
+
+/**
+ * 连发触发的延时计数_超时数
+ */
+#define KEYBURSH_DELAY_MAXCOUNT	10
+
+///////////////////////////////////////////////////////////////////
+// 实现
+
+/**
+ * 初始化控制按钮的管脚
+ *
+ */
 void ButtonInit() {
 	BTN1_DDR &= ~(1 << BTN1_BIT);
 	BTN2_DDR &= ~(1 << BTN2_BIT);
 	BTN3_DDR &= ~(1 << BTN3_BIT);
-
 }
 
-static uint8_t _keystate[] = { 0, 0, 0 };
+/**
+ * 触发按下
+ */
+void btnKeyDownFire(uint8_t btnIndex) {
+	if (btnIndex == KEYINDEX_MODE_BUTTON) {
+		if (modeBtnKeyDownFunc)
+			modeBtnKeyDownFunc();
+	} else if (btnIndex == KEYINDEX_ADD_BUTTON) {
+		if (addBtnKeyDownFunc)
+			addBtnKeyDownFunc();
+	} else if (btnIndex == KEYINDEX_SUB_BUTTON) {
+		if (subBtnKeyDownFunc)
+			subBtnKeyDownFunc();
+	}
+}
 
-uint8_t ButtonCheckBtnValue(uint8_t btnIndex) {
+/**
+ * 触发按下释放
+ */
+void btnKeyUpFire(uint8_t btnIndex) {
+	if (btnIndex == KEYINDEX_MODE_BUTTON) {
+		if (modeBtnKeyUpFunc)
+			modeBtnKeyUpFunc();
+	} else if (btnIndex == KEYINDEX_ADD_BUTTON) {
+		if (addBtnKeyUpFunc)
+			addBtnKeyUpFunc();
+	} else if (btnIndex == KEYINDEX_SUB_BUTTON) {
+		if (subBtnKeyUpFunc)
+			subBtnKeyUpFunc();
+	}
+}
 
-	uint8_t ret = 0;
+/**
+ * 触发连发
+ */
+void btnKeyBurshFire(uint8_t btnIndex) {
+	if (btnIndex == KEYINDEX_MODE_BUTTON) {
+		if (modeBtnKeyBurshFunc)
+			modeBtnKeyBurshFunc();
+	} else if (btnIndex == KEYINDEX_ADD_BUTTON) {
+		if (addBtnKeyBurshFunc)
+			addBtnKeyBurshFunc();
+	} else if (btnIndex == KEYINDEX_SUB_BUTTON) {
+		if (subBtnKeyBurshFunc)
+			subBtnKeyBurshFunc();
+	}
+}
+
+/**
+ * 触发连发释放
+ */
+void btnKeyBurshUpFire(uint8_t btnIndex) {
+	if (btnIndex == KEYINDEX_MODE_BUTTON) {
+		if (modeBtnKeyBurshUpFunc)
+			modeBtnKeyBurshUpFunc();
+	} else if (btnIndex == KEYINDEX_ADD_BUTTON) {
+		if (addBtnKeyBurshUpFunc)
+			addBtnKeyBurshUpFunc();
+	} else if (btnIndex == KEYINDEX_SUB_BUTTON) {
+		if (subBtnKeyBurshUpFunc)
+			subBtnKeyBurshUpFunc();
+	}
+}
+
+/**
+ * 按键检测
+ */
+void ButtonCheckBtnValue(uint8_t btnIndex) {
 
 	switch (_keystate[btnIndex]) {
 	case KEYSTATE_IDLE:
@@ -87,69 +182,35 @@ uint8_t ButtonCheckBtnValue(uint8_t btnIndex) {
 			_keystate[btnIndex] = KEYSTATE_IDLE;
 		} else {
 			_keystate[btnIndex] = KEYSTATE_WAIT_DOWN_RELEASE;
-			// keydown
-			if (btnIndex == KEYINDEX_MODE_BUTTON) {
-				if (modeBtnKeyDownFunc)
-					modeBtnKeyBurshFunc();
-			} else if (btnIndex == KEYINDEX_ADD_BUTTON) {
-				if (addBtnKeyDownFunc)
-					addBtnKeyDownFunc();
-			} else if (btnIndex == KEYINDEX_SUB_BUTTON) {
-				if (subBtnKeyDownFunc)
-					subBtnKeyDownFunc();
-			}
+			// fire_keydown
+			btnKeyDownFire(btnIndex);
 		}
 		break;
 	case KEYSTATE_WAIT_DOWN_RELEASE:
 		if (!VAL_BTN(btnIndex)) {
-			ret = 2;
-			_keystate[btnIndex] = KEYSTATE_WAIT_BURST_RELEASE;
+			// 加个计数，表示按键按下延时一会儿然后进入连发的姿势，并计数清零
+			_keyburshDelayCount[btnIndex]++;
+			if (_keyburshDelayCount[btnIndex] > KEYBURSH_DELAY_MAXCOUNT) {
+				_keystate[btnIndex] = KEYSTATE_WAIT_BURST_RELEASE;
+				_keyburshDelayCount[btnIndex] = 0;
+			}
 		} else {
 			_keystate[btnIndex] = KEYSTATE_IDLE;
-			// keyup
-			if (btnIndex == KEYINDEX_MODE_BUTTON) {
-				if (modeBtnKeyUpFunc)
-					modeBtnKeyUpFunc();
-			} else if (btnIndex == KEYINDEX_ADD_BUTTON) {
-				if (addBtnKeyUpFunc)
-					addBtnKeyUpFunc();
-			} else if (btnIndex == KEYINDEX_SUB_BUTTON) {
-				if (subBtnKeyUpFunc)
-					subBtnKeyUpFunc();
-			}
+			// fire_keyup
+			btnKeyUpFire(btnIndex);
 		}
 		break;
 	case KEYSTATE_WAIT_BURST_RELEASE:
-		//TODO: 加个延时计数，然后在此bursh
-		//bursh
-		if (btnIndex == KEYINDEX_MODE_BUTTON) {
-			if (modeBtnKeyBurshFunc)
-				modeBtnKeyBurshFunc();
-		} else if (btnIndex == KEYINDEX_ADD_BUTTON) {
-			if (addBtnKeyBurshFunc)
-				addBtnKeyBurshFunc();
-		} else if (btnIndex == KEYINDEX_SUB_BUTTON) {
-			if (subBtnKeyBurshFunc)
-				subBtnKeyBurshFunc();
-		}
+		// fire_bursh
+		btnKeyBurshFire(btnIndex);
 
 		if (VAL_BTN(btnIndex)) {
 			_keystate[btnIndex] = KEYSTATE_IDLE;
-			// burshup
-			if (btnIndex == KEYINDEX_MODE_BUTTON) {
-				if (modeBtnKeyBurshUpFunc)
-					modeBtnKeyBurshUpFunc();
-			} else if (btnIndex == KEYINDEX_ADD_BUTTON) {
-				if (addBtnKeyBurshUpFunc)
-					addBtnKeyBurshUpFunc();
-			} else if (btnIndex == KEYINDEX_SUB_BUTTON) {
-				if (subBtnKeyBurshUpFunc)
-					subBtnKeyBurshUpFunc();
-			}
+			// fire_burshup
+			btnKeyBurshUpFire(btnIndex);
 		}
 		break;
 	}
-	return ret;
 }
 
 void ButtonRegisterModeButtonKeyDownFunc(callback_mode_button_keydown_t func) {

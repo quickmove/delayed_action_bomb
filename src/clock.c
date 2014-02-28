@@ -1,3 +1,11 @@
+//       _/             _/                            _/
+//      _/
+//     _/           _/_/     _/  _/_/             _/_/
+//    _/             _/     _/_/    _/             _/
+//   _/             _/     _/      _/             _/
+//  _/             _/     _/      _/       _/    _/
+// _/_/_/_/_/   _/_/_/   _/      _/   _/    _/_/  copyright by linjing. 2014
+
 #include <avr/io.h>
 #include <util/delay.h>
 #include <stdint.h>

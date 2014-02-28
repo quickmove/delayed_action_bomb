@@ -1,3 +1,14 @@
+//       _/             _/                            _/
+//      _/
+//     _/           _/_/     _/  _/_/             _/_/
+//    _/             _/     _/_/    _/             _/
+//   _/             _/     _/      _/             _/
+//  _/             _/     _/      _/       _/    _/
+// _/_/_/_/_/   _/_/_/   _/      _/   _/    _/_/  copyright by linjing. 2014
+
+// 常规的三个按键 mode, +, -
+// 长按按键，带有连发功能， 按键均带有down up bursh burshup 4个事件，需预注册事件回调
+
 #ifndef _BUTTON_H
 #define _BUTTON_H
 
@@ -22,17 +33,13 @@ typedef void (*callback_sub_button_keyup_t) ();
 typedef void (*callback_sub_button_keybursh_t) ();
 typedef void (*callback_sub_button_keyburshup_t) ();
 
-/**
-* 初始化控制按钮的管脚
-*
-*/
+
 void ButtonInit();
 
-/**
- * 按键检测
- */
-uint8_t ButtonCheckBtnValue(uint8_t btnIndex);
+void ButtonCheckBtnValue(uint8_t btnIndex);
 
+
+// 注册键盘回调
 void ButtonRegisterModeButtonKeyDownFunc(callback_mode_button_keydown_t func);
 void ButtonRegisterModeButtonKeyUpFunc(callback_mode_button_keyup_t func);
 void ButtonRegisterModeButtonKeyBurshFunc(callback_mode_button_keybursh_t func);

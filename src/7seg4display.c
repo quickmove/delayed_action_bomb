@@ -1,3 +1,11 @@
+//       _/             _/                            _/
+//      _/
+//     _/           _/_/     _/  _/_/             _/_/
+//    _/             _/     _/_/    _/             _/
+//   _/             _/     _/      _/             _/
+//  _/             _/     _/      _/       _/    _/
+// _/_/_/_/_/   _/_/_/   _/      _/   _/    _/_/  copyright by linjing. 2014
+
 #include <avr/io.h>
 #include <util/delay.h>
 
@@ -49,7 +57,10 @@ const uint8_t LED_NUMBER_DATA[] = {
 */
 void Display7Seg4SetPosition(uint8_t position);
 
-
+/**
+* 初始化4位7段数码管脚位
+*
+*/
 void Display7Seg4Init() {
 	uint8_t i = 0;
 	for(i = 0; i < 4; i++) {
@@ -70,12 +81,22 @@ void Display7Seg4SetPosition(uint8_t position) {
 	CASCODE_PORT = tmp1 & tmp2;
 }
 
+/**
+* 设置某位的7段数码管显示
+*
+* number 显示的数值
+* position 4位的7段数码管，此为指定某位，0开始
+*
+*/
 void Display7Seg4SetPositionNumber(uint8_t number, uint8_t position) {
 	Display7Seg4SetPosition(position);
 	IC164SendData(LED_NUMBER_DATA[number]);
 }
 
 static uint8_t flash7segflag = 0;
+/**
+ * 闪烁中间的那秒点
+ */
 void Flash7Seg4Dot(void) {
 	if(flash7segflag) {
 		flash7segflag = 0;

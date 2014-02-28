@@ -1,3 +1,11 @@
+//       _/             _/                            _/
+//      _/
+//     _/           _/_/     _/  _/_/             _/_/
+//    _/             _/     _/_/    _/             _/
+//   _/             _/     _/      _/             _/
+//  _/             _/     _/      _/       _/    _/
+// _/_/_/_/_/   _/_/_/   _/      _/   _/    _/_/  copyright by linjing. 2014
+
 #include "74164.h"
 
 #include <avr/io.h>
@@ -24,12 +32,20 @@
 #define SET_DATA164		DATA164_PORT |= (1 << DATA164_BIT)
 #define CLR_DATA164		DATA164_PORT &= ~(1 << DATA164_BIT)
 
-
+/**
+* 初始化164脚位
+*
+*/
 void IC164Init() {
 	CP164_DDR |= (1 << CP164_BIT);
 	DATA164_DDR |= (1 << DATA164_BIT);
 }
 
+/**
+* 向74164发送数据
+*
+* data 数据
+*/
 void IC164SendData(uint8_t data) {
 	
 	uint8_t i = 7;
