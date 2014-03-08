@@ -6,28 +6,28 @@
 //  _/             _/     _/      _/       _/    _/
 // _/_/_/_/_/   _/_/_/   _/      _/   _/    _/_/  copyright by linjing. 2014
 
-// ³£¹æµÄÈı¸ö°´¼ü mode, +, -
-// ³¤°´°´¼ü£¬´øÓĞÁ¬·¢¹¦ÄÜ£¬ °´¼ü¾ù´øÓĞdown up bursh burshup 4¸öÊÂ¼ş£¬ĞèÔ¤×¢²áÊÂ¼ş»Øµ÷
+// å¸¸è§„çš„ä¸‰ä¸ªæŒ‰é”® mode, +, -
+// é•¿æŒ‰æŒ‰é”®ï¼Œå¸¦æœ‰è¿å‘åŠŸèƒ½ï¼Œ æŒ‰é”®å‡å¸¦æœ‰down up bursh burshup 4ä¸ªäº‹ä»¶ï¼Œéœ€é¢„æ³¨å†Œäº‹ä»¶å›è°ƒ
 
 #ifndef _BUTTON_H
 #define _BUTTON_H
 
 #include <stdint.h>
 
-// °´¼ü´¥·¢»Øµ÷
-// mode¼ü
+// æŒ‰é”®è§¦å‘å›è°ƒ
+// modeé”®
 typedef void (*callback_mode_button_keydown_t) ();
 typedef void (*callback_mode_button_keyup_t) ();
 typedef void (*callback_mode_button_keybursh_t) ();
 typedef void (*callback_mode_button_keyburshup_t) ();
 
-// add¼ü
+// addé”®
 typedef void (*callback_add_button_keydown_t) ();
 typedef void (*callback_add_button_keyup_t) ();
 typedef void (*callback_add_button_keybursh_t) ();
 typedef void (*callback_add_button_keyburshup_t) ();
 
-// sub¼ü
+// subé”®
 typedef void (*callback_sub_button_keydown_t) ();
 typedef void (*callback_sub_button_keyup_t) ();
 typedef void (*callback_sub_button_keybursh_t) ();
@@ -39,7 +39,7 @@ void ButtonInit();
 void ButtonCheckBtnValue(uint8_t btnIndex);
 
 
-// ×¢²á¼üÅÌ»Øµ÷
+// æ³¨å†Œé”®ç›˜å›è°ƒ
 void ButtonRegisterModeButtonKeyDownFunc(callback_mode_button_keydown_t func);
 void ButtonRegisterModeButtonKeyUpFunc(callback_mode_button_keyup_t func);
 void ButtonRegisterModeButtonKeyBurshFunc(callback_mode_button_keybursh_t func);

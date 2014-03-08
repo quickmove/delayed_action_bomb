@@ -17,11 +17,11 @@
 
 void onModeButtonKeyUp();
 
-uint8_t led_number_left = 0; // 7¶ÎÊıÂë¹Ü£¬×ó±ßÊı×ÖµÄÖµ
-uint8_t led_number_right = 0; // 7¶ÎÊıÂë¹Ü£¬ÓÒ±ßÊı×ÖµÄÖµ
+uint8_t led_number_left = 0; // 7æ®µæ•°ç ç®¡ï¼Œå·¦è¾¹æ•°å­—çš„å€¼
+uint8_t led_number_right = 0; // 7æ®µæ•°ç ç®¡ï¼Œå³è¾¹æ•°å­—çš„å€¼
 
 /**
- * ³õÊ¼»¯¸÷Éè±¸¶ÔÓ¦µ¥Æ¬»úI/O¿Ú
+ * åˆå§‹åŒ–å„è®¾å¤‡å¯¹åº”å•ç‰‡æœºI/Oå£
  *
  */
 void init() {

@@ -12,7 +12,7 @@
 #include "ds1302.h"
 
 ///////////////////////////
-// ds1302Ω≈Œª…Ë÷√ 
+// ds1302ËÑö‰ΩçËÆæÁΩÆ 
 
 #define DS1302_RST_PORT		PORTC
 #define DS1302_RST_DDR		DDRC
@@ -29,7 +29,7 @@
 
 
 ////////////////////////////
-// ds1302Ω≈Œª≤Ÿ◊˜
+// ds1302ËÑö‰ΩçÊìç‰Ωú
 
 #define SET_DS1302_RST		DS1302_RST_PORT |= (1 << DS1302_RST_BIT)
 #define CLR_DS1302_RST		DS1302_RST_PORT &= ~(1 << DS1302_RST_BIT)
@@ -37,18 +37,18 @@
 #define SET_DS1302_CLK		DS1302_CLK_PORT |= (1 << DS1302_CLK_BIT)
 #define CLR_DS1302_CLK		DS1302_CLK_PORT &= ~(1 << DS1302_CLK_BIT)
 
-// IO∏≥÷µ
+// IOËµãÂÄº
 #define SET_DS1302_IO		DS1302_IO_PORT |= (1 << DS1302_IO_BIT)
 #define CLR_DS1302_IO		DS1302_IO_PORT &= ~(1 << DS1302_IO_BIT)
-// IO»°÷µ
+// IOÂèñÂÄº
 #define VAL_DS1302_IO		(DS1302_IO_PIN & (1 << DS1302_IO_BIT))
 
-// …Ë÷√IO ∂¡/–¥
+// ËÆæÁΩÆIO ËØª/ÂÜô
 #define DS1302_IO_WRITE		DS1302_IO_DDR |= (1 << DS1302_IO_BIT)
 #define DS1302_IO_READ		DS1302_IO_DDR &= ~(1 << DS1302_IO_BIT)
 
 //////////////////////////
-// ºƒ¥Ê∆˜µÿ÷∑
+// ÂØÑÂ≠òÂô®Âú∞ÂùÄ
 #define ADDR_READ_SECOND		0x81
 #define ADDR_WRITE_SECOND		0x80
 #define ADDR_READ_MINUTE		0x83
@@ -59,28 +59,28 @@
 
 
 //////////////////////////
-// ∫Ø ˝…˘√˜
+// ÂáΩÊï∞Â£∞Êòé
 
 /**
-* ∂¡“ª∏ˆ◊÷Ω⁄ ˝æ›
+* ËØª‰∏Ä‰∏™Â≠óËäÇÊï∞ÊçÆ
 *
 */
 uint8_t readByte(void);
 
 /**
-* –¥“ª∏ˆ◊÷Ω⁄ ˝æ›
+* ÂÜô‰∏Ä‰∏™Â≠óËäÇÊï∞ÊçÆ
 *
 */
 void writeByte(uint8_t data);
 
 /**
-* –¥ds1302ºƒ¥Ê∆˜
+* ÂÜôds1302ÂØÑÂ≠òÂô®
 *
 */
 void writeReg(uint8_t addr, uint8_t data);
 
 /**
-* ∂¡ds1302ºƒ¥Ê∆˜
+* ËØªds1302ÂØÑÂ≠òÂô®
 *
 */
 uint8_t readReg(uint8_t addr);
@@ -92,7 +92,7 @@ uint8_t readReg(uint8_t addr);
 uint8_t readByte(void) {
 	uint8_t ret = 0;
 	
-	// …Ë÷√∂¡
+	// ËÆæÁΩÆËØª
 	DS1302_IO_READ;
 
 	uint8_t i = 0;
@@ -102,12 +102,12 @@ uint8_t readByte(void) {
 			ret |= 0x80;
 		}
 
-		//  ±÷”…œ…˝~œ¬Ωµ
+		// Êó∂Èíü‰∏äÂçá~‰∏ãÈôç
 		SET_DS1302_CLK;
 		CLR_DS1302_CLK;
 	}
 
-	// ª÷∏¥–¥
+	// ÊÅ¢Â§çÂÜô
 	DS1302_IO_WRITE;
 	return ret;
 }
@@ -120,7 +120,7 @@ void writeByte(uint8_t data) {
 		else
 			CLR_DS1302_IO;
 
-		//  ±÷”…œ…˝~œ¬Ωµ
+		// Êó∂Èíü‰∏äÂçá~‰∏ãÈôç
 		SET_DS1302_CLK;
 		CLR_DS1302_CLK;
 

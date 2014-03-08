@@ -6,7 +6,7 @@
 //  _/             _/     _/      _/       _/    _/
 // _/_/_/_/_/   _/_/_/   _/      _/   _/    _/_/  copyright by linjing. 2014
 
-// ds1302驱动
+// ds1302椹卞姩
 
 #ifndef _DS1302_H
 #define _DS1302_H
@@ -14,13 +14,13 @@
 #include <stdint.h>
 
 /**
-* 初始化ds1302
+* 鍒濆鍖杁s1302
 *
 */
 void DS1302Init();
 
 /**
-* 获取时间
+* 鑾峰彇鏃堕棿
 *
 */
 uint8_t DS1302GetHour();
@@ -28,7 +28,7 @@ uint8_t DS1302GetMinute();
 uint8_t DS1302GetSecond();
 
 /**
-* 设置时间
+* 璁剧疆鏃堕棿
 *
 */
 void DS1302SetHour(uint8_t hour);
