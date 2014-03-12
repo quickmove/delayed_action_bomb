@@ -1,10 +1,15 @@
-//       _/             _/                            _/
-//      _/
-//     _/           _/_/     _/  _/_/             _/_/
-//    _/             _/     _/_/    _/             _/
-//   _/             _/     _/      _/             _/
-//  _/             _/     _/      _/       _/    _/
-// _/_/_/_/_/   _/_/_/   _/      _/   _/    _/_/  copyright by linjing. 2014
+/*         
+         _                    _
+       /_/\                 /_/\
+      /_/\/      _       _ _\_\/
+     /_/\/     /_/\     /_/_/\
+    /_/\/      \_\/      /_/\/
+   /_/\/         _      /_/\/
+  /_/\/_ _ _   /_/_ _ _/_/\/
+ /_/_/_/_/_/\  \/_/_/_/\_\/  copyright.2014
+ \_\_\_\_\_\/   \_\_\_\/       by linjing
+
+*/
 
 // 共阴4位7段数码管 显示控制
 // 7段数据 调用74164驱动 做串并转化
@@ -17,7 +22,10 @@
 
 void Display7Seg4Init();
 void Display7Seg4SetPositionNumber(uint8_t number, uint8_t position);
-void Flash7Seg4Dot();
+void Display7Seg4FlashDot();
+uint8_t Display7Seg4GetFlashDotFlag();
+
+
 
 
 #endif

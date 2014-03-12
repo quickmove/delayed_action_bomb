@@ -1,10 +1,15 @@
-//       _/             _/                            _/
-//      _/
-//     _/           _/_/     _/  _/_/             _/_/
-//    _/             _/     _/_/    _/             _/
-//   _/             _/     _/      _/             _/
-//  _/             _/     _/      _/       _/    _/
-// _/_/_/_/_/   _/_/_/   _/      _/   _/    _/_/  copyright by linjing. 2014
+/*         
+         _                    _
+       /_/\                 /_/\
+      /_/\/      _       _ _\_\/
+     /_/\/     /_/\     /_/_/\
+    /_/\/      \_\/      /_/\/
+   /_/\/         _      /_/\/
+  /_/\/_ _ _   /_/_ _ _/_/\/
+ /_/_/_/_/_/\  \/_/_/_/\_\/  copyright.2014
+ \_\_\_\_\_\/   \_\_\_\/       by linjing
+
+*/
 
 #include <avr/io.h>
 #include <util/delay.h>
@@ -54,7 +59,7 @@
 #define ADDR_READ_MINUTE		0x83
 #define ADDR_WRITE_MINUTE		0x82
 #define ADDR_READ_HOUR			0x85
-#define ADDR_WRITE_HOUR			0x84
+#define ADDR_WRITE_HOUR		0x84
 
 
 
@@ -158,29 +163,55 @@ uint8_t readReg(uint8_t addr) {
 
 ///////////////////////////////////////////////////////
 
-
+/**
+* 初始化ds1302
+*
+*/
 void DS1302Init() {
 	DS1302_RST_DDR |= (1 << DS1302_RST_BIT);
 	DS1302_CLK_DDR |= (1 << DS1302_CLK_BIT);
 	DS1302_IO_DDR |= (1 << DS1302_IO_BIT);
 }
-
+/**
+* 设置时
+*
+*/
 void DS1302SetHour(uint8_t hour) {
 	writeReg(ADDR_WRITE_HOUR, hour);
 }
+/**
+* 设置分
+*
+*/
 void DS1302SetMinute(uint8_t minute) {
 	writeReg(ADDR_WRITE_MINUTE, minute);
 }
+/**
+* 设置秒
+*
+*/
 void DS1302SetSecond(uint8_t second) {
 	writeReg(ADDR_WRITE_SECOND, second);
 }
 
+/**
+* 获取时
+*
+*/
 uint8_t DS1302GetHour(void) {
 	return readReg(ADDR_READ_HOUR);
 }
+/**
+* 获取分
+*
+*/
 uint8_t DS1302GetMinute(void) {
 	return readReg(ADDR_READ_MINUTE);
 }
+/**
+* 获取秒
+*
+*/
 uint8_t DS1302GetSecond(void) {
 	return readReg(ADDR_READ_SECOND);
 }

@@ -1,10 +1,15 @@
-//       _/             _/                            _/
-//      _/
-//     _/           _/_/     _/  _/_/             _/_/
-//    _/             _/     _/_/    _/             _/
-//   _/             _/     _/      _/             _/
-//  _/             _/     _/      _/       _/    _/
-// _/_/_/_/_/   _/_/_/   _/      _/   _/    _/_/  copyright by linjing. 2014
+/*         
+         _                    _
+       /_/\                 /_/\
+      /_/\/      _       _ _\_\/
+     /_/\/     /_/\     /_/_/\
+    /_/\/      \_\/      /_/\/
+   /_/\/         _      /_/\/
+  /_/\/_ _ _   /_/_ _ _/_/\/
+ /_/_/_/_/_/\  \/_/_/_/\_\/  copyright.2014
+ \_\_\_\_\_\/   \_\_\_\/       by linjing
+
+*/
 
 #include <avr/io.h>
 #include <util/delay.h>
@@ -16,7 +21,7 @@
 // ==== 共阴极脚位设置 ===
 // 共阴极4脚所在的单片机PORT
 #define CASCODE_PORT		PORTD
-#define CASCODE_DDR			DDRD
+#define CASCODE_DDR		DDRD
 // 共阴极起始脚位
 #define CASCODE_BIT_0		0
 
@@ -26,9 +31,16 @@
 // 共阴极脚位反umask 	11110000
 #define CASCODE_UMASK	0xF0
 
+#define DOT_PORT		PORTD
+#define DOT_DDR			DDRD
+#define DOT_BIT			4
+
+#define SET_DOT			DOT_PORT |= (1 << DOT_BIT)
+#define CLR_DOT			DOT_PORT &= ~(1 << DOT_BIT)
+
 
 // LED段显示位表
-const uint8_t LED_NUMBER_DATA[] = { 
+const uint8_t LED_NUMBER_DATA[] = {
 							  0xfc, // 0
 							  0x60, // 1
 							  0xda, // 2
@@ -38,15 +50,9 @@ const uint8_t LED_NUMBER_DATA[] = {
 							  0xbe, // 6
 							  0xe0, // 7
 							  0xfe, // 8
-							  0xf6	// 9
+							  0xf6,	// 9
+							  0x00  // 10(什么也不显示)
 							 };
-
-#define DOT_PORT		PORTD
-#define DOT_DDR			DDRD
-#define DOT_BIT			4
-
-#define SET_DOT			DOT_PORT |= (1 << DOT_BIT)
-#define CLR_DOT			DOT_PORT &= ~(1 << DOT_BIT)
 
 
 /**
@@ -71,6 +77,10 @@ void Display7Seg4Init() {
 }
 
 
+/**
+* 指定位置显示
+* 把指定位置的共级拉低
+*/
 void Display7Seg4SetPosition(uint8_t position) {
 	uint8_t tmp1 = CASCODE_MASK;
 	uint8_t tmp2 = CASCODE_UMASK;
@@ -97,7 +107,7 @@ static uint8_t flash7segflag = 0;
 /**
  * 闪烁中间的那秒点
  */
-void Flash7Seg4Dot(void) {
+void Display7Seg4FlashDot(void) {
 	if(flash7segflag) {
 		flash7segflag = 0;
 		SET_DOT;
@@ -105,4 +115,8 @@ void Flash7Seg4Dot(void) {
 		flash7segflag = 1;
 		CLR_DOT;
 	}
+}
+
+uint8_t Display7Seg4GetFlashDotFlag() {
+	return flash7segflag;
 }

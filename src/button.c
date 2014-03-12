@@ -1,10 +1,15 @@
-//       _/             _/                            _/
-//      _/
-//     _/           _/_/     _/  _/_/             _/_/
-//    _/             _/     _/_/    _/             _/
-//   _/             _/     _/      _/             _/
-//  _/             _/     _/      _/       _/    _/
-// _/_/_/_/_/   _/_/_/   _/      _/   _/    _/_/  copyright by linjing. 2014
+/*         
+         _                    _
+       /_/\                 /_/\
+      /_/\/      _       _ _\_\/
+     /_/\/     /_/\     /_/_/\
+    /_/\/      \_\/      /_/\/
+   /_/\/         _      /_/\/
+  /_/\/_ _ _   /_/_ _ _/_/\/
+ /_/_/_/_/_/\  \/_/_/_/\_\/  copyright.2014
+ \_\_\_\_\_\/   \_\_\_\/       by linjing
+
+*/
 
 #include <avr/io.h>
 #include <stdint.h>
@@ -18,35 +23,38 @@
 // 等待按下释放
 #define KEYSTATE_WAIT_DOWN_RELEASE		2
 // 等待连发释放
-#define KEYSTATE_WAIT_BURST_RELEASE	3
+#define KEYSTATE_WAIT_BURST_RELEASE		3
 
 ///////////////////////////
 // 脚位定义
 
-#define BTN1_PIN		PIND
-#define BTN1_DDR		DDRD
-#define BTN1_BIT		5
+#define BTN1_PIN		PINC
+#define BTN1_PORT		PORTC
+#define BTN1_DDR		DDRC
+#define BTN1_BIT		0
 
-#define BTN2_PIN		PIND
-#define BTN2_DDR		DDRD
-#define BTN2_BIT		6
+#define BTN2_PIN		PINC
+#define BTN2_PORT		PORTC
+#define BTN2_DDR		DDRC
+#define BTN2_BIT		1
 
-#define BTN3_PIN		PIND
-#define BTN3_DDR		DDRD
-#define BTN3_BIT		7
+#define BTN3_PIN		PINC
+#define BTN3_PORT		PORTC
+#define BTN3_DDR		DDRC
+#define BTN3_BIT		2
 
 ///////////////////////////
 // 脚位取值
 
 // 按键相对于按键1的bit位置偏移作为index号...
 // 这里有点奇怪的写法没找到其他写法啊...
-#define BTN_GLOBAL_PIN		PIND
+#define BTN_GLOBAL_PIN		PINC
 #define VAL_BTN(index)		(BTN_GLOBAL_PIN & (1 << (BTN1_BIT + index)))
 
 // 按键索引，相对于第0个按键
 #define KEYINDEX_MODE_BUTTON	2
-#define KEYINDEX_ADD_BUTTON	1
-#define KEYINDEX_SUB_BUTTON	0
+#define KEYINDEX_ADD_BUTTON		1
+#define KEYINDEX_SUB_BUTTON		0
 
 //////////////////////////////////////////////////////////////
 // 声明
@@ -82,12 +90,12 @@ static uint8_t _keystate[] = { 0, 0, 0 };
 /**
  * 连发触发的延时计数
  */
-static uint8_t _keyburshDelayCount[] = { 0, 0, 0 };
+static uint16_t _keyburshDelayCount[] = { 0, 0, 0 };
 
 /**
  * 连发触发的延时计数_超时数
  */
-#define KEYBURSH_DELAY_MAXCOUNT	10
+#define KEYBURSH_DELAY_MAXCOUNT	0x5FFF
 
 ///////////////////////////////////////////////////////////////////
 // 实现
@@ -100,6 +108,11 @@ void ButtonInit() {
 	BTN1_DDR &= ~(1 << BTN1_BIT);
 	BTN2_DDR &= ~(1 << BTN2_BIT);
 	BTN3_DDR &= ~(1 << BTN3_BIT);
+	
+
+	BTN1_PORT |= (1 << BTN1_BIT);
+	BTN2_PORT |= (1 << BTN2_BIT);
+	BTN3_PORT |= (1 << BTN3_BIT);
 }
 
 /**
@@ -196,6 +209,7 @@ void ButtonCheckBtnValue(uint8_t btnIndex) {
 			}
 		} else {
 			_keystate[btnIndex] = KEYSTATE_IDLE;
+			_keyburshDelayCount[btnIndex] = 0;
 			// fire_keyup
 			btnKeyUpFire(btnIndex);
 		}
