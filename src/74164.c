@@ -16,7 +16,7 @@
 #include <avr/io.h>
 
 
-// ==== 164½ÅÎ»ÉèÖÃ ====
+// ==== 164è„šä½è®¾ç½® ====
 
 #define CP164_PORT		PORTB
 #define CP164_DDR		DDRB
@@ -27,18 +27,18 @@
 #define DATA164_BIT	1
 
 
-// ==== 164½ÅÎ»²Ù×÷ ====
+// ==== 164è„šä½æ“ä½œ ====
 
-// 164Ê±ÖÓ
+// 164æ—¶é’Ÿ
 #define SET_CP164		CP164_PORT |= (1 << CP164_BIT)
 #define CLR_CP164		CP164_PORT &= ~(1 << CP164_BIT)
 
-// 164Êı¾İ
+// 164æ•°æ®
 #define SET_DATA164		DATA164_PORT |= (1 << DATA164_BIT)
 #define CLR_DATA164		DATA164_PORT &= ~(1 << DATA164_BIT)
 
 /**
-* ³õÊ¼»¯164½ÅÎ»
+* åˆå§‹åŒ–164è„šä½
 *
 */
 void IC164Init() {
@@ -47,9 +47,9 @@ void IC164Init() {
 }
 
 /**
-* Ïò74164·¢ËÍÊı¾İ
+* å‘74164å‘é€æ•°æ®
 *
-* data Êı¾İ
+* data æ•°æ®
 */
 void IC164SendData(uint8_t data) {
 	

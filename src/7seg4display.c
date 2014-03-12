@@ -1,4 +1,4 @@
-/*         
+/*
          _                    _
        /_/\                 /_/\
       /_/\/      _       _ _\_\/
@@ -18,28 +18,21 @@
 #include "74164.h"
 
 
-// ==== ��������λ���� ===
-// ������4�����ڵĵ�Ƭ��PORT
+// ==== 共阴极脚位设置 ===
+// 共阴极4脚所在的单片机PORT
 #define CASCODE_PORT		PORTD
-#define CASCODE_DDR		DDRD
-// ��������ʼ��λ
+#define CASCODE_DDR			DDRD
+// 共阴极起始脚位
 #define CASCODE_BIT_0		0
 
-// ��λmask����������ʱȡ������4��˳���λ
-// ��������λmask		00001111
+// 脚位mask，用于运算时取共阴极4个顺序脚位
+// 共阴极脚位mask		00001111
 #define CASCODE_MASK	0x0F
-// ��������λ��umask 	11110000
+// 共阴极脚位反umask 	11110000
 #define CASCODE_UMASK	0xF0
 
-#define DOT_PORT		PORTD
-#define DOT_DDR			DDRD
-#define DOT_BIT			4
 
-#define SET_DOT			DOT_PORT |= (1 << DOT_BIT)
-#define CLR_DOT			DOT_PORT &= ~(1 << DOT_BIT)
-
-
-// LED����ʾλ��
+// LED段显示位表
 const uint8_t LED_NUMBER_DATA[] = {
 							  0xfc, // 0
 							  0x60, // 1
@@ -50,21 +43,22 @@ const uint8_t LED_NUMBER_DATA[] = {
 							  0xbe, // 6
 							  0xe0, // 7
 							  0xfe, // 8
+
 							  0xf6,	// 9
-							  0x00  // 10(ʲôҲ����ʾ)
+							  0x00  // 10(什么也不显示)
 							 };
 
 
 /**
-* ����4λ7������ܵ�λ��ƽ���͵�ƽ����
-* PORTC ��2λ��ʼ��4λΪ������
+* 设置4位7段数码管的位电平，低电平点亮
+* PORTC 第2位开始的4位为共阴脚
 *
-* position 4λ��7������ܣ���Ϊָ��ĳλ��0��ʼ
+* position 4位的7段数码管，此为指定某位，0开始
 */
 void Display7Seg4SetPosition(uint8_t position);
 
 /**
-* ��ʼ��4λ7������ܽ�λ
+* 初始化4位7段数码管脚位
 *
 */
 void Display7Seg4Init() {
@@ -78,24 +72,24 @@ void Display7Seg4Init() {
 
 
 /**
-* ָ��λ����ʾ
-* ��ָ��λ�õĹ�������
+* 指定位置显示
+* 把指定位置的共级拉低
 */
 void Display7Seg4SetPosition(uint8_t position) {
 	uint8_t tmp1 = CASCODE_MASK;
 	uint8_t tmp2 = CASCODE_UMASK;
 
-	tmp1 |= CASCODE_PORT;	// ȡ��������λ���ڵ�PORT������λ������tmp1
-	tmp2 |= ~(1 << (CASCODE_BIT_0 + position));	//ָ��λ�õ͵�ƽ
+	tmp1 |= CASCODE_PORT;	// 取共阴极脚位所在的PORT的其他位，赋给tmp1
+	tmp2 |= ~(1 << (CASCODE_BIT_0 + position));	//指定位置低电平
 
 	CASCODE_PORT = tmp1 & tmp2;
 }
 
 /**
-* ����ĳλ��7���������ʾ
+* 设置某位的7段数码管显示
 *
-* number ��ʾ����ֵ
-* position 4λ��7������ܣ���Ϊָ��ĳλ��0��ʼ
+* number 显示的数值
+* position 4位的7段数码管，此为指定某位，0开始
 *
 */
 void Display7Seg4SetPositionNumber(uint8_t number, uint8_t position) {
@@ -105,7 +99,7 @@ void Display7Seg4SetPositionNumber(uint8_t number, uint8_t position) {
 
 static uint8_t flash7segflag = 0;
 /**
- * ��˸�м�������
+ * 闪烁中间的那秒点
  */
 void Display7Seg4FlashDot(void) {
 	if(flash7segflag) {

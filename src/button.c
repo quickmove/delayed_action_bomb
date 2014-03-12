@@ -1,3 +1,4 @@
+
 /*         
          _                    _
        /_/\                 /_/\
@@ -16,17 +17,18 @@
 
 #include "button.h"
 
-// ¿ÕÏÐ
+// ç©ºé—²
 #define KEYSTATE_IDLE					0
-// µÈ´ý°´ÏÂÈ·ÈÏ(·À¶¶)
+// ç­‰å¾…æŒ‰ä¸‹ç¡®è®¤(é˜²æŠ–)
 #define KEYSTATE_WAIT_DOWN_VALID		1
-// µÈ´ý°´ÏÂÊÍ·Å
+// ç­‰å¾…æŒ‰ä¸‹é‡Šæ”¾
 #define KEYSTATE_WAIT_DOWN_RELEASE		2
-// µÈ´ýÁ¬·¢ÊÍ·Å
+// ç­‰å¾…è¿žå‘é‡Šæ”¾
 #define KEYSTATE_WAIT_BURST_RELEASE		3
 
 ///////////////////////////
-// ½ÅÎ»¶¨Òå
+// è„šä½å®šä¹‰
+
 
 #define BTN1_PIN		PINC
 #define BTN1_PORT		PORTC
@@ -44,34 +46,36 @@
 #define BTN3_BIT		2
 
 ///////////////////////////
-// ½ÅÎ»È¡Öµ
+// è„šä½å–å€¼
 
-// °´¼üÏà¶ÔÓÚ°´¼ü1µÄbitÎ»ÖÃÆ«ÒÆ×÷ÎªindexºÅ...
-// ÕâÀïÓÐµãÆæ¹ÖµÄÐ´·¨Ã»ÕÒµ½ÆäËûÐ´·¨°¡...
+// æŒ‰é”®ç›¸å¯¹äºŽæŒ‰é”®1çš„bitä½ç½®åç§»ä½œä¸ºindexå·...
+// è¿™é‡Œæœ‰ç‚¹å¥‡æ€ªçš„å†™æ³•æ²¡æ‰¾åˆ°å…¶ä»–å†™æ³•å•Š...
+
 #define BTN_GLOBAL_PIN		PINC
 #define VAL_BTN(index)		(BTN_GLOBAL_PIN & (1 << (BTN1_BIT + index)))
 
-// °´¼üË÷Òý£¬Ïà¶ÔÓÚµÚ0¸ö°´¼ü
+// æŒ‰é”®ç´¢å¼•ï¼Œç›¸å¯¹äºŽç¬¬0ä¸ªæŒ‰é”®
 #define KEYINDEX_MODE_BUTTON	2
+
 #define KEYINDEX_ADD_BUTTON		1
 #define KEYINDEX_SUB_BUTTON		0
 
 //////////////////////////////////////////////////////////////
-// ÉùÃ÷
+// å£°æ˜Ž
 
-// mode¼üÏà¹ØµÄ»Øµ÷¾ä±ú
+// modeé”®ç›¸å…³çš„å›žè°ƒå¥æŸ„
 callback_mode_button_keydown_t modeBtnKeyDownFunc;
 callback_mode_button_keyup_t modeBtnKeyUpFunc;
 callback_mode_button_keybursh_t modeBtnKeyBurshFunc;
 callback_mode_button_keyburshup_t modeBtnKeyBurshUpFunc;
 
-// add¼üÏà¹ØµÄ»Øµ÷¾ä±ú
+// addé”®ç›¸å…³çš„å›žè°ƒå¥æŸ„
 callback_add_button_keydown_t addBtnKeyDownFunc;
 callback_add_button_keyup_t addBtnKeyUpFunc;
 callback_add_button_keybursh_t addBtnKeyBurshFunc;
 callback_add_button_keyburshup_t addBtnKeyBurshUpFunc;
 
-// sub¼üÏà¹ØµÄ»Øµ÷¾ä±ú
+// subé”®ç›¸å…³çš„å›žè°ƒå¥æŸ„
 callback_sub_button_keydown_t subBtnKeyDownFunc;
 callback_sub_button_keyup_t subBtnKeyUpFunc;
 callback_sub_button_keybursh_t subBtnKeyBurshFunc;
@@ -83,25 +87,26 @@ void btnKeyBurshFire(uint8_t btnIndex);
 void btnKeyBurshUpFire(uint8_t btnIndex);
 
 /**
- * °´¼üµ±Ç°×´Ì¬
+ * æŒ‰é”®å½“å‰çŠ¶æ€
  */
 static uint8_t _keystate[] = { 0, 0, 0 };
 
 /**
- * Á¬·¢´¥·¢µÄÑÓÊ±¼ÆÊý
+ * è¿žå‘è§¦å‘çš„å»¶æ—¶è®¡æ•°
  */
+
 static uint16_t _keyburshDelayCount[] = { 0, 0, 0 };
 
 /**
- * Á¬·¢´¥·¢µÄÑÓÊ±¼ÆÊý_³¬Ê±Êý
+ * è¿žå‘è§¦å‘çš„å»¶æ—¶è®¡æ•°_è¶…æ—¶æ•°
  */
 #define KEYBURSH_DELAY_MAXCOUNT	0x5FFF
 
 ///////////////////////////////////////////////////////////////////
-// ÊµÏÖ
+// å®žçŽ°
 
 /**
- * ³õÊ¼»¯¿ØÖÆ°´Å¥µÄ¹Ü½Å
+ * åˆå§‹åŒ–æŽ§åˆ¶æŒ‰é’®çš„ç®¡è„š
  *
  */
 void ButtonInit() {
@@ -116,7 +121,7 @@ void ButtonInit() {
 }
 
 /**
- * ´¥·¢°´ÏÂ
+ * è§¦å‘æŒ‰ä¸‹
  */
 void btnKeyDownFire(uint8_t btnIndex) {
 	if (btnIndex == KEYINDEX_MODE_BUTTON) {
@@ -132,7 +137,7 @@ void btnKeyDownFire(uint8_t btnIndex) {
 }
 
 /**
- * ´¥·¢°´ÏÂÊÍ·Å
+ * è§¦å‘æŒ‰ä¸‹é‡Šæ”¾
  */
 void btnKeyUpFire(uint8_t btnIndex) {
 	if (btnIndex == KEYINDEX_MODE_BUTTON) {
@@ -148,7 +153,7 @@ void btnKeyUpFire(uint8_t btnIndex) {
 }
 
 /**
- * ´¥·¢Á¬·¢
+ * è§¦å‘è¿žå‘
  */
 void btnKeyBurshFire(uint8_t btnIndex) {
 	if (btnIndex == KEYINDEX_MODE_BUTTON) {
@@ -164,7 +169,7 @@ void btnKeyBurshFire(uint8_t btnIndex) {
 }
 
 /**
- * ´¥·¢Á¬·¢ÊÍ·Å
+ * è§¦å‘è¿žå‘é‡Šæ”¾
  */
 void btnKeyBurshUpFire(uint8_t btnIndex) {
 	if (btnIndex == KEYINDEX_MODE_BUTTON) {
@@ -180,7 +185,7 @@ void btnKeyBurshUpFire(uint8_t btnIndex) {
 }
 
 /**
- * °´¼ü¼ì²â
+ * æŒ‰é”®æ£€æµ‹
  */
 void ButtonCheckBtnValue(uint8_t btnIndex) {
 
@@ -201,7 +206,7 @@ void ButtonCheckBtnValue(uint8_t btnIndex) {
 		break;
 	case KEYSTATE_WAIT_DOWN_RELEASE:
 		if (!VAL_BTN(btnIndex)) {
-			// ¼Ó¸ö¼ÆÊý£¬±íÊ¾°´¼ü°´ÏÂÑÓÊ±Ò»»á¶ùÈ»ºó½øÈëÁ¬·¢µÄ×ËÊÆ£¬²¢¼ÆÊýÇåÁã
+			// åŠ ä¸ªè®¡æ•°ï¼Œè¡¨ç¤ºæŒ‰é”®æŒ‰ä¸‹å»¶æ—¶ä¸€ä¼šå„¿ç„¶åŽè¿›å…¥è¿žå‘çš„å§¿åŠ¿ï¼Œå¹¶è®¡æ•°æ¸…é›¶
 			_keyburshDelayCount[btnIndex]++;
 			if (_keyburshDelayCount[btnIndex] > KEYBURSH_DELAY_MAXCOUNT) {
 				_keystate[btnIndex] = KEYSTATE_WAIT_BURST_RELEASE;
