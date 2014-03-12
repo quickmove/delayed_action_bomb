@@ -31,6 +31,13 @@
 // 共阴极脚位反umask 	11110000
 #define CASCODE_UMASK	0xF0
 
+// 秒点设置
+#define DOT_DDR		DDRD
+#define DOT_PORT		PORTD
+#define DOT_BIT		4
+#define SET_DOT		DOT_PORT |= (1 << DOT_BIT)
+#define CLR_DOT		DOT_PORT &= ~(1 << DOT_BIT)
+
 
 // LED段显示位表
 const uint8_t LED_NUMBER_DATA[] = {
