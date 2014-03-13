@@ -1,4 +1,3 @@
-
 /*         
          _                    _
        /_/\                 /_/\
@@ -28,6 +27,8 @@
 
 void onModeButtonKeyUp();
 void onModeButtonKeyBursh();
+void onModeButtonKeyBurshUp();
+
 /**
  * 当前时钟模式
  * 0 显示模式 1 编辑模式
@@ -51,6 +52,11 @@ uint8_t led_number_minute = 0;
  */
 uint8_t mode_bursh_action_flag = 0;
 
+/**
+ * mode 按钮第一次进入连发状态的标志 0 未触发, 1 已触发
+ */
+uint8_t mode_button_keybursh_first_flag = 0;
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -72,20 +78,15 @@ void init() {
 	ButtonInit();
 	ButtonRegisterModeButtonKeyUpFunc(onModeButtonKeyUp);
 	ButtonRegisterModeButtonKeyBurshFunc(onModeButtonKeyBursh);
+	ButtonRegisterModeButtonKeyBurshUpFunc(onModeButtonKeyBurshUp);
 
 }
 
 int main(void) {
 	init();
 
-
 	// 秒点闪烁led延时标志计数
 	uint8_t dotLedFlagCount = 0;
-
-	// 进入编辑模式
-//	current_clockmode = 1;
-	// 进入分编辑模式
-//	current_editunit = 1;
 
 	while (1) {
 
@@ -94,15 +95,17 @@ int main(void) {
 		led_number_minute = DS1302GetMinute();
 		uint8_t numbers[4];
 
-		if(!Display7Seg4GetFlashDotFlag() && current_clockmode && !current_editunit) {
+		if (!Display7Seg4GetFlashDotFlag() && current_clockmode
+				&& !current_editunit) {
 			numbers[0] = 10;
 			numbers[1] = 10;
 		} else {
 			numbers[0] = led_number_hour / 16;
 			numbers[1] = led_number_hour % 16;
-	
+
 		}
-		if(!Display7Seg4GetFlashDotFlag() && current_clockmode && current_editunit) {
+		if (!Display7Seg4GetFlashDotFlag() && current_clockmode
+				&& current_editunit) {
 			numbers[2] = 10;
 			numbers[3] = 10;
 		} else {
@@ -123,7 +126,7 @@ int main(void) {
 		}
 
 		// 按键处理
-		for(i=0; i < 3; i++) {
+		for (i = 0; i < 3; i++) {
 			ButtonCheckBtnValue(i);
 		}
 
@@ -155,14 +158,26 @@ void onModeButtonKeyUp() {
  * 显示模式下，切换到编辑模式
  *
  */
+
 void onModeButtonKeyBursh() {
 	// 触发进入标志
+	if (!mode_button_keybursh_first_flag) {
+		mode_button_keybursh_first_flag = 1;
 
-	if (current_clockmode) {
-		DS1302SetHour(led_number_hour);
-		DS1302SetMinute(led_number_minute);
-		DS1302SetSecond(0);
+		if (current_clockmode) {
+			DS1302SetHour(led_number_hour);
+			DS1302SetMinute(led_number_minute);
+			DS1302SetSecond(0);
+		}
+		current_clockmode = !current_clockmode;
 	}
-	current_clockmode = !current_clockmode;
 
+}
+
+/**
+ * mode 按钮按钮按住不放后的释放
+ * 解除标志
+ */
+void onModeButtonKeyBurshUp() {
+	mode_button_keybursh_first_flag = 0;
 }

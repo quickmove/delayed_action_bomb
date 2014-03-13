@@ -50,7 +50,6 @@ const uint8_t LED_NUMBER_DATA[] = {
 							  0xbe, // 6
 							  0xe0, // 7
 							  0xfe, // 8
-
 							  0xf6,	// 9
 							  0x00  // 10(什么也不显示)
 							 };

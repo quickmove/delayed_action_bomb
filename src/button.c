@@ -1,4 +1,3 @@
-
 /*         
          _                    _
        /_/\                 /_/\
@@ -100,7 +99,7 @@ static uint16_t _keyburshDelayCount[] = { 0, 0, 0 };
 /**
  * 连发触发的延时计数_超时数
  */
-#define KEYBURSH_DELAY_MAXCOUNT	0x5FFF
+#define KEYBURSH_DELAY_MAXCOUNT	0x40
 
 ///////////////////////////////////////////////////////////////////
 // 实现
@@ -114,7 +113,6 @@ void ButtonInit() {
 	BTN2_DDR &= ~(1 << BTN2_BIT);
 	BTN3_DDR &= ~(1 << BTN3_BIT);
 	
-
 	BTN1_PORT |= (1 << BTN1_BIT);
 	BTN2_PORT |= (1 << BTN2_BIT);
 	BTN3_PORT |= (1 << BTN3_BIT);
