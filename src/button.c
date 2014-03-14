@@ -54,10 +54,9 @@
 #define VAL_BTN(index)		(BTN_GLOBAL_PIN & (1 << (BTN1_BIT + index)))
 
 // 按键索引，相对于第0个按键
-#define KEYINDEX_MODE_BUTTON	2
-
+#define KEYINDEX_MODE_BUTTON		0
 #define KEYINDEX_ADD_BUTTON		1
-#define KEYINDEX_SUB_BUTTON		0
+#define KEYINDEX_SUB_BUTTON		2
 
 //////////////////////////////////////////////////////////////
 // 声明

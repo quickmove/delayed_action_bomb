@@ -1,15 +1,15 @@
 /*         
-         _                    _
-       /_/\                 /_/\
+ _                    _
+ /_/\                 /_/\
       /_/\/      _       _ _\_\/
-     /_/\/     /_/\     /_/_/\
+ /_/\/     /_/\     /_/_/\
     /_/\/      \_\/      /_/\/
-   /_/\/         _      /_/\/
-  /_/\/_ _ _   /_/_ _ _/_/\/
+ /_/\/         _      /_/\/
+ /_/\/_ _ _   /_/_ _ _/_/\/
  /_/_/_/_/_/\  \/_/_/_/\_\/  copyright.2014
  \_\_\_\_\_\/   \_\_\_\/       by linjing
 
-*/
+ */
 
 #include <avr/io.h>
 #include <util/delay.h>
@@ -23,11 +23,18 @@
 // 秒点闪烁LED延时闪烁计数标志阀值
 #define DOTLED_FLAG_MAXCOUNT		0x20
 
+// 编辑小时模式
+#define IS_EDIT_HOUR_MODE		current_clockmode && !current_editunit
+// 编辑分钟模式
+#define IS_EDIT_MINUTE_MODE	current_clockmode && current_editunit
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 void onModeButtonKeyUp();
 void onModeButtonKeyBursh();
 void onModeButtonKeyBurshUp();
+void onAddButtonKeyUp();
+void onSubButtonKeyUp();
 
 /**
  * 当前时钟模式
@@ -71,14 +78,16 @@ void init() {
 
 	DS1302Init();
 	// 设置初始时分秒
-	DS1302SetSecond(0x00);
-	DS1302SetMinute(0x13);
-	DS1302SetHour(0x03);
+	DS1302SetSecond(0);
+	DS1302SetMinute(13);
+	DS1302SetHour(3);
 
 	ButtonInit();
 	ButtonRegisterModeButtonKeyUpFunc(onModeButtonKeyUp);
 	ButtonRegisterModeButtonKeyBurshFunc(onModeButtonKeyBursh);
 	ButtonRegisterModeButtonKeyBurshUpFunc(onModeButtonKeyBurshUp);
+	ButtonRegisterAddButtonKeyUpFunc(onAddButtonKeyUp);
+	ButtonRegisterSubButtonKeyUpFunc(onSubButtonKeyUp);
 
 }
 
@@ -88,29 +97,29 @@ int main(void) {
 	// 秒点闪烁led延时标志计数
 	uint8_t dotLedFlagCount = 0;
 
+	led_number_hour = DS1302GetHour();
+	led_number_minute = DS1302GetMinute();
+
 	while (1) {
 
 		// 模式及显示处理
-		led_number_hour = DS1302GetHour();
-		led_number_minute = DS1302GetMinute();
+
 		uint8_t numbers[4];
 
-		if (!Display7Seg4GetFlashDotFlag() && current_clockmode
-				&& !current_editunit) {
+		if (!Display7Seg4GetFlashDotFlag() && IS_EDIT_HOUR_MODE) { // 编辑小时
 			numbers[0] = 10;
 			numbers[1] = 10;
 		} else {
-			numbers[0] = led_number_hour / 16;
-			numbers[1] = led_number_hour % 16;
+			numbers[0] = led_number_hour / 10;
+			numbers[1] = led_number_hour % 10;
 
 		}
-		if (!Display7Seg4GetFlashDotFlag() && current_clockmode
-				&& current_editunit) {
+		if (!Display7Seg4GetFlashDotFlag() && IS_EDIT_MINUTE_MODE) { // 编辑分钟
 			numbers[2] = 10;
 			numbers[3] = 10;
 		} else {
-			numbers[2] = led_number_minute / 16;
-			numbers[3] = led_number_minute % 16;
+			numbers[2] = led_number_minute / 10;
+			numbers[3] = led_number_minute % 10;
 		}
 
 		uint8_t i = 0;
@@ -180,4 +189,43 @@ void onModeButtonKeyBursh() {
  */
 void onModeButtonKeyBurshUp() {
 	mode_button_keybursh_first_flag = 0;
+}
+
+/**
+ * 等同于add 按钮 click
+ * 编辑模式下,加小时或者分钟
+ *
+ */
+void onAddButtonKeyUp() {
+	if (IS_EDIT_HOUR_MODE) {
+		led_number_hour++;
+		if (led_number_hour > 23) {
+			led_number_hour = 0;
+		}
+	} else if (IS_EDIT_MINUTE_MODE) {
+		led_number_minute++;
+		if (led_number_minute > 59) {
+			led_number_minute = 0;
+		}
+	}
+}
+
+/**
+ * 等同于 sub 按钮 click
+ * 编辑模式下,减小时或者分钟
+ */
+void onSubButtonKeyUp() {
+	if (IS_EDIT_HOUR_MODE) {
+		if (led_number_hour == 0) {
+			led_number_hour = 23;
+		} else {
+			led_number_hour--;
+		}
+	} else if (IS_EDIT_MINUTE_MODE) {
+		if (led_number_minute == 0) {
+			led_number_minute = 59;
+		} else {
+			led_number_minute--;
+		}
+	}
 }
