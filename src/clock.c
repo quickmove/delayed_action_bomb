@@ -1,15 +1,13 @@
-/*         
- _                    _
- /_/\                 /_/\
-      /_/\/      _       _ _\_\/
- /_/\/     /_/\     /_/_/\
-    /_/\/      \_\/      /_/\/
- /_/\/         _      /_/\/
- /_/\/_ _ _   /_/_ _ _/_/\/
- /_/_/_/_/_/\  \/_/_/_/\_\/  copyright.2014
- \_\_\_\_\_\/   \_\_\_\/       by linjing
-
- */
+//                   _                    _
+//                 /_/\                 /_/\
+//                /_/\/      _       _ _\_\/
+//               /_/\/     /_/\     /_/_/\
+//              /_/\/      \_\/      /_/\/
+//             /_/\/         _      /_/\/
+//            /_/\/_ _ _   /_/_ _ _/_/\/
+//           /_/_/_/_/_/\  \/_/_/_/\_\/  copyright.2014
+//           \_\_\_\_\_\/   \_\_\_\/       by linjing
+//
 
 #include <avr/io.h>
 #include <util/delay.h>
@@ -97,24 +95,27 @@ int main(void) {
 	// 秒点闪烁led延时标志计数
 	uint8_t dotLedFlagCount = 0;
 
-	led_number_hour = DS1302GetHour();
-	led_number_minute = DS1302GetMinute();
-
 	while (1) {
+
+		if (!current_clockmode) {
+			led_number_hour = DS1302GetHour();
+			led_number_minute = DS1302GetMinute();
+		}
 
 		// 模式及显示处理
 
 		uint8_t numbers[4];
 
-		if (!Display7Seg4GetFlashDotFlag() && IS_EDIT_HOUR_MODE) { // 编辑小时
+		// 编辑小时,闪烁小时的两个数字
+		if (!Display7Seg4GetFlashDotFlag() && IS_EDIT_HOUR_MODE) {
 			numbers[0] = 10;
 			numbers[1] = 10;
 		} else {
 			numbers[0] = led_number_hour / 10;
 			numbers[1] = led_number_hour % 10;
-
 		}
-		if (!Display7Seg4GetFlashDotFlag() && IS_EDIT_MINUTE_MODE) { // 编辑分钟
+		// 编辑分钟,闪烁分钟的两个数字
+		if (!Display7Seg4GetFlashDotFlag() && IS_EDIT_MINUTE_MODE) {
 			numbers[2] = 10;
 			numbers[3] = 10;
 		} else {
@@ -122,21 +123,23 @@ int main(void) {
 			numbers[3] = led_number_minute % 10;
 		}
 
+		// 按LED数字位扫描显示
 		uint8_t i = 0;
 		for (i = 0; i < 4; i++) {
 			Display7Seg4SetPositionNumber(numbers[i], i);
 			_delay_ms(5);
 		}
-		// 秒点处理
+
+		// 秒点闪烁处理
 		dotLedFlagCount++;
 		if (dotLedFlagCount > DOTLED_FLAG_MAXCOUNT) {
 			Display7Seg4FlashDot();
 			dotLedFlagCount = 0;
 		}
 
-		// 按键处理
+		// 按键扫描
 		for (i = 0; i < 3; i++) {
-			ButtonCheckBtnValue(i);
+			ButtonByIndexScan(i);
 		}
 
 	}

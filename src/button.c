@@ -1,15 +1,13 @@
-/*         
-         _                    _
-       /_/\                 /_/\
-      /_/\/      _       _ _\_\/
-     /_/\/     /_/\     /_/_/\
-    /_/\/      \_\/      /_/\/
-   /_/\/         _      /_/\/
-  /_/\/_ _ _   /_/_ _ _/_/\/
- /_/_/_/_/_/\  \/_/_/_/\_\/  copyright.2014
- \_\_\_\_\_\/   \_\_\_\/       by linjing
-
-*/
+//                   _                    _
+//                 /_/\                 /_/\
+//                /_/\/      _       _ _\_\/
+//               /_/\/     /_/\     /_/_/\
+//              /_/\/      \_\/      /_/\/
+//             /_/\/         _      /_/\/
+//            /_/\/_ _ _   /_/_ _ _/_/\/
+//           /_/_/_/_/_/\  \/_/_/_/\_\/  copyright.2014
+//           \_\_\_\_\_\/   \_\_\_\/       by linjing
+//
 
 #include <avr/io.h>
 #include <stdint.h>
@@ -182,9 +180,9 @@ void btnKeyBurshUpFire(uint8_t btnIndex) {
 }
 
 /**
- * 按键检测
+ * 扫描 指定索引号的按键
  */
-void ButtonCheckBtnValue(uint8_t btnIndex) {
+void ButtonByIndexScan(uint8_t btnIndex) {
 
 	switch (_keystate[btnIndex]) {
 	case KEYSTATE_IDLE:

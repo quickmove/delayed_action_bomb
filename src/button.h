@@ -1,15 +1,13 @@
-/*         
-         _                    _
-       /_/\                 /_/\
-      /_/\/      _       _ _\_\/
-     /_/\/     /_/\     /_/_/\
-    /_/\/      \_\/      /_/\/
-   /_/\/         _      /_/\/
-  /_/\/_ _ _   /_/_ _ _/_/\/
- /_/_/_/_/_/\  \/_/_/_/\_\/  copyright.2014
- \_\_\_\_\_\/   \_\_\_\/       by linjing
-
-*/
+//                   _                    _
+//                 /_/\                 /_/\
+//                /_/\/      _       _ _\_\/
+//               /_/\/     /_/\     /_/_/\
+//              /_/\/      \_\/      /_/\/
+//             /_/\/         _      /_/\/
+//            /_/\/_ _ _   /_/_ _ _/_/\/
+//           /_/_/_/_/_/\  \/_/_/_/\_\/  copyright.2014
+//           \_\_\_\_\_\/   \_\_\_\/       by linjing
+//
 
 // 常规的三个按键 mode, +, -
 // 长按按键，带有连发功能， 按键均带有down up bursh burshup 4个事件，需预注册事件回调
@@ -41,7 +39,7 @@ typedef void (*callback_sub_button_keyburshup_t) ();
 
 void ButtonInit();
 
-void ButtonCheckBtnValue(uint8_t btnIndex);
+void ButtonByIndexScan(uint8_t btnIndex);
 
 
 // 注册键盘回调
